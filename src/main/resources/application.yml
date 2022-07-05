@@ -2,9 +2,9 @@ spring:
   sql.init.mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/products
-    username: postgres
-    password: timeregister
+    url: ${DATABASE_URL_CUSTOMIZE}
+    username: ${USER_NAME}
+    password: ${USER_PASSWORD}
   jpa:
     show-sql: true
     defer-datasource-initialization: true

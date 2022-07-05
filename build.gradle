@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.snaacker'
-sourceCompatibility = '11'
+sourceCompatibility = '18'
 
 configurations {
     compileOnly {
