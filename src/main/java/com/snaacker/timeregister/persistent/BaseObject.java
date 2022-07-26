@@ -13,8 +13,9 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 public class BaseObject {
-    @Column(name="created_date")
-    private Date createdDate;
-    @Column(name="updated_date")
-    private Date updatedDate;
+  @Column(name = "created_date")
+  private Date createdDate;
+
+  @Column(name = "updated_date")
+  private Date updatedDate;
 }
