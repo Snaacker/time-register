@@ -1,6 +1,6 @@
 package com.snaacker.timeregister.controller;
 
-import com.snaacker.timeregister.AllowAnonymous;
+import com.snaacker.timeregister.utils.AllowAnonymous;
 import com.snaacker.timeregister.config.JwtTokenUtil;
 import com.snaacker.timeregister.exception.TimeRegisterException;
 import com.snaacker.timeregister.persistent.User;

@@ -1,5 +1,6 @@
 package com.snaacker.timeregister.persistent;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,14 +17,15 @@ public class TimesheetRecord extends BaseObject {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
+  @Column(name = "working_date", unique = true)
+  @NotNull
+  private Date workingDate;
+
   @Column(name = "from_time")
-  private Date fromTime;
+  private int fromTime;
 
   @Column(name = "to_time")
-  private Date toTime;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Employee employee;
+  private int toTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private User users;

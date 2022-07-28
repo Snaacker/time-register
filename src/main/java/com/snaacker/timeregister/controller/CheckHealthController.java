@@ -1,6 +1,6 @@
 package com.snaacker.timeregister.controller;
 
-import com.snaacker.timeregister.AllowAnonymous;
+import com.snaacker.timeregister.utils.AllowAnonymous;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

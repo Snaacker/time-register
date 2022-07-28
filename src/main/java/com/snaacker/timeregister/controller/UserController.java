@@ -1,6 +1,8 @@
 package com.snaacker.timeregister.controller;
 
 import com.snaacker.timeregister.model.RequestUserDto;
+import com.snaacker.timeregister.model.TimeRecordResponseDto;
+import com.snaacker.timeregister.model.UserTimeRecordResponseDto;
 import com.snaacker.timeregister.service.UserService;
 import com.snaacker.timeregister.utils.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +49,19 @@ public class UserController {
   }
 
   // TODO: return list registed time of user
-  @GetMapping("/{id}/registed")
-  public List<Object> getAllRegistedTimeByUser() {
+  @GetMapping("/{id}/registration")
+  public List<TimeRecordResponseDto> getAllRegistedTimeByUser() {
+    return null;
+  }
+
+
+  @PutMapping("/{id}/registration")
+  public List<UserTimeRecordResponseDto> addTimeRecord(){
+    return null;
+  }
+
+  @PostMapping("/{id}/registration")
+  public List<UserTimeRecordResponseDto> editTime(){
     return null;
   }
 }

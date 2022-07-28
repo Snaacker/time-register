@@ -1,4 +1,4 @@
-package com.snaacker.timeregister;
+package com.snaacker.timeregister.utils;
 
 import com.snaacker.timeregister.persistent.Role;
 

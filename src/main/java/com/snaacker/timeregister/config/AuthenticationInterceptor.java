@@ -1,10 +1,9 @@
 package com.snaacker.timeregister.config;
 
-import com.snaacker.timeregister.AllowAnonymous;
+import com.snaacker.timeregister.utils.AllowAnonymous;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
