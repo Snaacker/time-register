@@ -3,6 +3,7 @@ package com.snaacker.timeregister.config;
 import com.snaacker.timeregister.utils.AllowAnonymous;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.service.UserService;
+import com.snaacker.timeregister.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     final AllowAnonymous allowAnonymous =
         ((HandlerMethod) handler).getMethod().getAnnotation((AllowAnonymous.class));
 
-    if (allowAnonymous != null) {
+    if (allowAnonymous != null || request.getRequestURI().contains("api/v1/authentication")) {
       return true;
     }
     if (request.getHeader("Authorization") == null) {
@@ -38,23 +39,25 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
       log.info("Validation OK.");
       return true;
     } else if (request.getHeader("Authorization") != null) {
-      JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-      String username = null;
-      String jwtToken = null;
-      // JWT Token is in the form "Bearer token". Remove Bearer word and get
-      // only the Token
-      jwtToken = request.getHeader("Authorization").substring(7);
-      try {
-        username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-      } catch (IllegalArgumentException e) {
-        System.out.println("Unable to get JWT Token");
-      } catch (ExpiredJwtException e) {
-        System.out.println("JWT Token has expired");
+      // if already authenticated
+      if (request.getHeader("Authorization").startsWith("Bearer ")) {
+        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+        String username = null;
+        String jwtToken = request.getHeader("Authorization").substring(7);
+        try {
+          username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        } catch (IllegalArgumentException e) {
+          System.out.println("Unable to get JWT Token");
+        } catch (ExpiredJwtException e) {
+          System.out.println("JWT Token has expired");
+        }
+        // TODO: this is wrong, should be DTO class instead
+        User authenticatedUser = userService.getUserByName(username);
+        jwtTokenUtil.validateToken(jwtToken, authenticatedUser);
+        return true;
+      }else {
+        return false;
       }
-      // TODO: this is wrong, should be DTO class instead
-      User authenticatedUser = userService.getUserByName(username);
-      jwtTokenUtil.validateToken(jwtToken, authenticatedUser);
-      return true;
     } else {
       log.info("Validation NOK.");
       return false;

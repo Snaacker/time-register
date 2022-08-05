@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTimeRecordResponseDto {
-  UserResponseDto user;
-  List<TimeRecordResponseDto> timeRecord;
+public class TimeRecordRequestDto implements Serializable {
+    private Date fromTime;
+    private Date toTime;
 }

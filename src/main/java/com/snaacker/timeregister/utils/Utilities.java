@@ -1,31 +1,57 @@
 package com.snaacker.timeregister.utils;
 
-import com.snaacker.timeregister.model.RequestUserDto;
+import com.snaacker.timeregister.exception.TimeRegisterException;
+import com.snaacker.timeregister.model.UserRequestDto;
 import com.snaacker.timeregister.persistent.User;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class Utilities {
 
-  public static RequestUserDto model2Dto(User user) {
+  public static String encrypt(String s)
+      throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
+          IllegalBlockSizeException, BadPaddingException {
+    byte[] encrypted = encryptToByte(s);
 
-    RequestUserDto employeeDto = new RequestUserDto();
-    employeeDto.setAddress(user.getAddress());
-    employeeDto.setAccountId(user.getAccountId());
-    employeeDto.setFirstName(user.getFirstName());
-    employeeDto.setLastName(user.getLastName());
-    employeeDto.setPhoneNumber(user.getPhoneNumber());
-    return employeeDto;
+    StringBuilder sb = new StringBuilder();
+    for (byte b : encrypted) {
+      sb.append((char) b);
+    }
+
+    return sb.toString();
   }
 
-  public static User dto2Model(RequestUserDto requestUserDto) {
-    User user = new User();
-    user.setAddress(requestUserDto.getAddress());
-    user.setAccountId(requestUserDto.getAccountId());
-    user.setFirstName(requestUserDto.getFirstName());
-    user.setLastName(requestUserDto.getLastName());
-    user.setPhoneNumber(requestUserDto.getPhoneNumber());
-    if (null != requestUserDto.getId()) {
-      user.setId(requestUserDto.getId());
+  public static byte[] encryptToByte(String s)
+      throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
+          IllegalBlockSizeException, BadPaddingException {
+    String key = System.getProperty("SECRET_KEY_BASE", System.getenv("SECRET_KEY_BASE"));
+    Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
+    Cipher cipher = Cipher.getInstance("AES");
+    cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+    return cipher.doFinal(s.getBytes());
+  }
+
+  public static String decrypt(String s)
+      throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
+          IllegalBlockSizeException, BadPaddingException {
+    String key = System.getProperty("SECRET_KEY_BASE", System.getenv("SECRET_KEY_BASE"));
+    Cipher cipher = Cipher.getInstance("AES");
+    Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
+    byte[] bb = new byte[s.length()];
+    for (int i = 0; i < s.length(); i++) {
+      bb[i] = (byte) s.charAt(i);
     }
-    return user;
+    cipher.init(Cipher.DECRYPT_MODE, aesKey);
+    return new String(cipher.doFinal(bb));
   }
 }

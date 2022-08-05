@@ -1,6 +1,5 @@
 package com.snaacker.timeregister.persistent;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,16 +16,13 @@ public class TimesheetRecord extends BaseObject {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @Column(name = "working_date", unique = true)
-  @NotNull
-  private Date workingDate;
-
   @Column(name = "from_time")
-  private int fromTime;
+  private Date fromTime;
 
   @Column(name = "to_time")
-  private int toTime;
+  private Date toTime;
 
+  // This is a stupid issue since user is a keyword in Postgres
   @ManyToOne(fetch = FetchType.LAZY)
   private User users;
 }

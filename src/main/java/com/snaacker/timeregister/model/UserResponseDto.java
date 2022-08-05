@@ -3,10 +3,9 @@ package com.snaacker.timeregister.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.snaacker.timeregister.persistent.Role;
+import com.snaacker.timeregister.persistent.User;
 import com.sun.istack.NotNull;
 import lombok.*;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ import java.util.Date;
 @JsonIgnoreProperties(
     value = {"hibernateLazyInitializer", "handler"},
     ignoreUnknown = true)
-public class RequestUserDto {
+public class UserResponseDto {
   @NotNull
   @JsonProperty("id")
   private Long id;
@@ -39,12 +38,12 @@ public class RequestUserDto {
   @JsonProperty("role_name")
   private Role roleName;
 
-  @JsonProperty("created_date")
-  private Date createdDate;
-
-  @JsonProperty("updated_date")
-  private Date updatedDate;
-
-  @JsonProperty("password")
-  private String password;
+  public UserResponseDto(User user) {
+    this.accountId = user.getAccountId();
+    this.firstName = user.getFirstName();
+    this.lastName = user.getLastName();
+    this.phoneNumber = user.getPhoneNumber();
+    this.address = user.getAddress();
+    this.roleName = user.getRoleName();
+  }
 }

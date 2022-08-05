@@ -14,4 +14,5 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
-  secret: testjwt
+  secret: cbfZjNawhGCMkqA7yuQyMT7XmepLvW1T123avd
+  token-expires-after-days: 14
