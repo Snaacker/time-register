@@ -2,6 +2,7 @@ package com.snaacker.timeregister.persistent;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "timesheet_record")
+@RestResource(exported = false)
 public class TimesheetRecord extends BaseObject {
 
   @Column(name = "from_time")
@@ -20,7 +22,6 @@ public class TimesheetRecord extends BaseObject {
 
   @Column(name = "type")
   private TimesheetType timesheetType;
-
   @Column(name = "is_ready_for_review")
   private boolean isReadyForReview;
 

@@ -12,6 +12,9 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 
 jwt:
   secret: ${JWT_SECRET_KEY}

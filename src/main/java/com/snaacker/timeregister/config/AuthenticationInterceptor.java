@@ -27,6 +27,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws TimeRegisterBadRequestException {
+    // TODO: dev only - this should be remove on production deploy/introduce dev profile
+    if (request.getRequestURI().contains("localhost")
+        && (request.getRequestURI().contains("swagger-resources")
+            || request.getRequestURI().contains("swagger-ui")
+            || request.getRequestURI().contains("v2/api-docs")
+            || request.getRequestURI().contains(".ico")
+            || request.getRequestURI().contains("/error")
+            || request.getRequestURI().contains("/webjars"))) {
+      return true;
+    }
     final AllowAnonymous allowAnonymous =
         ((HandlerMethod) handler).getMethod().getAnnotation((AllowAnonymous.class));
 
@@ -64,7 +74,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // TODO: check authorization here
         if (allowAdmin != null && !authenticatedUser.getRoleName().equals(Role.ADMIN)) {
           throw new TimeRegisterBadRequestException("Permission denied");
-
         }
         return true;
       } else {

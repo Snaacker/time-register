@@ -24,7 +24,7 @@ public class TimeRegisterInitializingData {
 
   @EventListener
   public void appReady(ApplicationReadyEvent event) throws Exception {
-    // TODO: load sample data using sql file
+    // TODO: load sample data using sql file - this will failed if ddl-auto is not `create`
     String password = Base64.getEncoder().encodeToString(Utilities.encryptToByte("qwerty"));
     System.out.println("================ Password: " + password);
     // Create first admin user - using flyway later

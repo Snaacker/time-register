@@ -2,6 +2,7 @@ package com.snaacker.timeregister.persistent;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "restaurant")
+@RestResource(exported = false)
 public class Restaurant extends BaseObject{
     @Column(name = "name")
     private String name;
