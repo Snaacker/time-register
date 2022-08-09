@@ -1,5 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
+import com.snaacker.timeregister.utils.Constants;
+
 public enum Role {
   ADMIN(Constants.ADMIN),
   MANAGER(Constants.MANAGER),
@@ -16,10 +18,4 @@ public enum Role {
     return value;
   }
 
-  public static class Constants {
-    public static final String ADMIN = "Admin";
-    public static final String MANAGER = "Manager";
-    public static final String EMPLOYEE = "Employee";
-    public static final String ANONYMOUS = "Anonymous";
-  }
 }

@@ -1,12 +1,11 @@
-package com.snaacker.timeregister.utils;
+package com.snaacker.timeregister.config;
 
+import com.snaacker.timeregister.model.UserResponse;
 import com.snaacker.timeregister.persistent.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -16,23 +15,14 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtTokenUtil implements Serializable {
+public class JwtTokenConfiguration implements Serializable {
 
   private static final long serialVersionUID = -2550185165626007488L;
 
   public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
   @Value("${jwt.secret}")
-  private static String secret;
-
-  public JwtTokenUtil() {
-  }
-
-  public JwtTokenUtil(String secret) {
-    this.secret = secret;
-  }
-
-
+  private String secret;
 
   // retrieve username from jwt token
   public String getUsernameFromToken(String token) {
@@ -83,7 +73,7 @@ public class JwtTokenUtil implements Serializable {
   }
 
   // validate token
-  public Boolean validateToken(String token, User user) {
+  public Boolean validateToken(String token, UserResponse user) {
     final String username = getUsernameFromToken(token);
     return (username.equals(user.getUsername()) && !isTokenExpired(token));
   }

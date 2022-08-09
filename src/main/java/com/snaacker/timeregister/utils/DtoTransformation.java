@@ -1,28 +1,53 @@
 package com.snaacker.timeregister.utils;
 
-import com.snaacker.timeregister.model.UserRequestDto;
+import com.snaacker.timeregister.model.TimeRecordResponse;
+import com.snaacker.timeregister.model.UserRequest;
+import com.snaacker.timeregister.model.UserResponse;
+import com.snaacker.timeregister.persistent.TimesheetRecord;
 import com.snaacker.timeregister.persistent.User;
 
 public class DtoTransformation {
-    // TODO: these dto transform methods are not needed
-    public static UserRequestDto model2Dto(User user) {
+  // TODO: these dto transform methods are not needed
+  public static UserRequest model2Dto(User user) {
 
-        UserRequestDto employeeDto = new UserRequestDto();
-        employeeDto.setAddress(user.getAddress());
-        employeeDto.setAccountId(user.getAccountId());
-        employeeDto.setFirstName(user.getFirstName());
-        employeeDto.setLastName(user.getLastName());
-        employeeDto.setPhoneNumber(user.getPhoneNumber());
-        return employeeDto;
-    }
+    UserRequest userRequest = new UserRequest();
+    userRequest.setAddress(user.getAddress());
+    userRequest.setAccountId(user.getAccountId());
+    userRequest.setFirstName(user.getFirstName());
+    userRequest.setLastName(user.getLastName());
+    userRequest.setPhoneNumber(user.getPhoneNumber());
+    return userRequest;
+  }
 
-    public static User dto2Model(UserRequestDto requestUserDto) {
-        User user = new User();
-        user.setAddress(requestUserDto.getAddress());
-        user.setAccountId(requestUserDto.getAccountId());
-        user.setFirstName(requestUserDto.getFirstName());
-        user.setLastName(requestUserDto.getLastName());
-        user.setPhoneNumber(requestUserDto.getPhoneNumber());
-        return user;
-    }
+  public static UserResponse user2UserResponse(User user) {
+
+    UserResponse userResponse = new UserResponse();
+    userResponse.setAddress(user.getAddress());
+    userResponse.setAccountId(user.getAccountId());
+    userResponse.setFirstName(user.getFirstName());
+    userResponse.setLastName(user.getLastName());
+    userResponse.setPhoneNumber(user.getPhoneNumber());
+    userResponse.setRoleName(user.getRoleName());
+    userResponse.setId(user.getId());
+    userResponse.setUsername(user.getUsername());
+    return userResponse;
+  }
+
+  public static User dto2User(UserRequest requestUser) {
+    User user = new User();
+    user.setAddress(requestUser.getAddress());
+    user.setAccountId(requestUser.getAccountId());
+    user.setFirstName(requestUser.getFirstName());
+    user.setLastName(requestUser.getLastName());
+    user.setPhoneNumber(requestUser.getPhoneNumber());
+    return user;
+  }
+
+  public static TimeRecordResponse timesheetRecord2TimeRecordResponse(
+      TimesheetRecord timesheetRecord) {
+    TimeRecordResponse timeRecordResponse = new TimeRecordResponse();
+    timeRecordResponse.setToTime(timesheetRecord.getToTime());
+    timeRecordResponse.setFromTime(timesheetRecord.getFromTime());
+    return timeRecordResponse;
+  }
 }

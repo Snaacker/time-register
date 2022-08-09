@@ -1,10 +1,12 @@
 package com.snaacker.timeregister.controller;
 
+import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterException;
+import com.snaacker.timeregister.exception.TimeRegisterUnauthorizedException;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.repository.UserRepository;
-import com.snaacker.timeregister.utils.AllowAnonymous;
-import com.snaacker.timeregister.utils.JwtTokenUtil;
+import com.snaacker.timeregister.annotation.AllowAnonymous;
+import com.snaacker.timeregister.config.JwtTokenConfiguration;
 import com.snaacker.timeregister.utils.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
@@ -26,24 +29,36 @@ import java.util.Base64;
 public class AuthenticateController {
   @Autowired private UserRepository userRepository;
 
-  // TODO: Add exception handler for project
+  @Autowired private JwtTokenConfiguration jwtTokenConfiguration;
+
   @AllowAnonymous
   @PostMapping("")
   public ResponseEntity<String> authenticate(@RequestHeader("Authorization") String credential)
-          throws TimeRegisterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+          throws TimeRegisterUnauthorizedException, TimeRegisterBadRequestException {
     byte[] decodedBytes = Base64.getDecoder().decode(credential);
     String decodedString = new String(decodedBytes);
     String[] userCredential = decodedString.split(":");
     User requestUser = userRepository.findByUsername(userCredential[0]);
     if (null == requestUser) {
-      throw new TimeRegisterException("Bad credential");
+      throw new TimeRegisterUnauthorizedException("Bad credential");
     }
     String requestPassword = requestUser.getPassword();
-    if (!Utilities.decrypt(requestPassword).equals(userCredential[1])){
-      throw new TimeRegisterException("Bad credential");
+    String hashRequestPassword = "";
+    try {
+      hashRequestPassword =
+          Base64.getEncoder().encodeToString(Utilities.encryptToByte(userCredential[1]));
+    } catch (NoSuchPaddingException
+        | NoSuchAlgorithmException
+        | InvalidKeyException
+        | IllegalBlockSizeException
+        | BadPaddingException e) {
+      throw new TimeRegisterBadRequestException(e);
+    }
+    if (!requestPassword.equals(hashRequestPassword)) {
+      throw new TimeRegisterUnauthorizedException("Bad credential");
     } else {
-      JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-      return new ResponseEntity<>(jwtTokenUtil.generateToken(requestUser), HttpStatus.ACCEPTED);
+      return new ResponseEntity<>(
+          jwtTokenConfiguration.generateToken(requestUser), HttpStatus.ACCEPTED);
     }
   }
 }

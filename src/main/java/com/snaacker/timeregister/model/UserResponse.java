@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.snaacker.timeregister.persistent.Role;
 import com.snaacker.timeregister.persistent.User;
 import com.sun.istack.NotNull;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Data;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,13 +18,16 @@ import lombok.*;
 @JsonIgnoreProperties(
     value = {"hibernateLazyInitializer", "handler"},
     ignoreUnknown = true)
-public class UserResponseDto {
+public class UserResponse {
   @NotNull
   @JsonProperty("id")
   private Long id;
 
   @JsonProperty("account_id")
   private String accountId;
+
+  @JsonProperty("username")
+  private String username;
 
   @JsonProperty("first_name")
   private String firstName;
@@ -38,7 +44,7 @@ public class UserResponseDto {
   @JsonProperty("role_name")
   private Role roleName;
 
-  public UserResponseDto(User user) {
+  public UserResponse(User user) {
     this.accountId = user.getAccountId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();

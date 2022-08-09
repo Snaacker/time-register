@@ -10,11 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "users")
-public class User {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+public class User extends BaseObject {
 
   @Column(nullable = false, unique = true)
   private String username;
@@ -31,7 +27,7 @@ public class User {
   @Column(name = "last_name")
   private String lastName;
 
-  @Column(name = "email")
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
   @Column(name = "phone_number")
@@ -48,4 +44,10 @@ public class User {
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
   private List<TimesheetRecord> timesheetRecord;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Restaurant restaurant;
+
+  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+  private List<UserConfigureData> userConfigureData;
 }

@@ -1,9 +1,12 @@
 package com.snaacker.timeregister.config;
 
-import com.snaacker.timeregister.utils.AllowAnonymous;
+import com.snaacker.timeregister.annotation.AllowAdmin;
+import com.snaacker.timeregister.annotation.AllowAnonymous;
+import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
+import com.snaacker.timeregister.model.UserResponse;
+import com.snaacker.timeregister.persistent.Role;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.service.UserService;
-import com.snaacker.timeregister.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +22,16 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
   @Autowired UserService userService;
+  @Autowired JwtTokenConfiguration jwtTokenConfiguration;
 
   @Override
-  public boolean preHandle(
-      HttpServletRequest request, HttpServletResponse response, Object handler) {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws TimeRegisterBadRequestException {
     final AllowAnonymous allowAnonymous =
         ((HandlerMethod) handler).getMethod().getAnnotation((AllowAnonymous.class));
+
+    final AllowAdmin allowAdmin =
+        ((HandlerMethod) handler).getMethod().getAnnotation((AllowAdmin.class));
 
     if (allowAnonymous != null || request.getRequestURI().contains("api/v1/authentication")) {
       return true;
@@ -41,25 +48,30 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     } else if (request.getHeader("Authorization") != null) {
       // if already authenticated
       if (request.getHeader("Authorization").startsWith("Bearer ")) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
         String username = null;
         String jwtToken = request.getHeader("Authorization").substring(7);
         try {
-          username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+          username = jwtTokenConfiguration.getUsernameFromToken(jwtToken);
         } catch (IllegalArgumentException e) {
           System.out.println("Unable to get JWT Token");
         } catch (ExpiredJwtException e) {
           System.out.println("JWT Token has expired");
         }
         // TODO: this is wrong, should be DTO class instead
-        User authenticatedUser = userService.getUserByName(username);
-        jwtTokenUtil.validateToken(jwtToken, authenticatedUser);
+        UserResponse authenticatedUser = userService.getUserByName(username);
+        jwtTokenConfiguration.validateToken(jwtToken, authenticatedUser);
+
+        // TODO: check authorization here
+        if (allowAdmin != null && !authenticatedUser.getRoleName().equals(Role.ADMIN)) {
+          throw new TimeRegisterBadRequestException("Permission denied");
+
+        }
         return true;
-      }else {
+      } else {
         return false;
       }
     } else {
-      log.info("Validation NOK.");
+      log.info("Validation Not OK.");
       return false;
     }
   }
