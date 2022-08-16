@@ -22,5 +22,5 @@ public class UserTimeRecordResponse {
   @JsonProperty("user")
   UserResponse user;
   @JsonProperty("time_records")
-  List<TimeRecordResponse> timeRecords;
+  TimeRegisterGenericResponse<TimeRecordResponse> timeRecords;
 }

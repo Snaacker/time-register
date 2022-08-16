@@ -20,7 +20,7 @@ public class TimesheetRecord extends BaseObject {
   @Column(name = "to_time")
   private Date toTime;
 
-  @Column(name = "type")
+  @Column(name = "timesheet_type")
   private TimesheetType timesheetType;
   @Column(name = "is_ready_for_review")
   private boolean isReadyForReview;

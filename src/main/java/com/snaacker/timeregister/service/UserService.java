@@ -8,7 +8,6 @@ import com.snaacker.timeregister.persistent.TimesheetRecord;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;
 import com.snaacker.timeregister.repository.UserRepository;
-import com.snaacker.timeregister.utils.Constants;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import com.snaacker.timeregister.utils.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +40,7 @@ public class UserService {
     Pageable pageable = PageRequest.of(startingPage, pageSize);
     List<UserResponse> listUser =
         userRepository.findAll(pageable).stream()
-            .map(user -> DtoTransformation.user2UserResponse(user))
+            .map(DtoTransformation::user2UserResponse)
             .collect(Collectors.toList());
     return new TimeRegisterGenericResponse<>(listUser, startingPage, pageSize);
   }
@@ -95,8 +99,7 @@ public class UserService {
     return DtoTransformation.user2UserResponse(updatedUser);
   }
 
-  public String deleteUser(long id)
-      throws TimeRegisterBadRequestException {
+  public String deleteUser(long id) throws TimeRegisterBadRequestException {
     User deleteUser =
         userRepository
             .findById(id)
@@ -122,31 +125,25 @@ public class UserService {
     User user = userRepository.findById(id).orElseThrow(TimeRegisterException::new);
     TimesheetRecord timesheetRecord = new TimesheetRecord();
     timesheetRecord.setUsers(user);
-    // TODO: Add logic check same date + check working time (working time constrain)
+    // TODO: Add logic check working time (working time constrain)
+
+    if (!Utilities.isSameDay(timeRecordRequest.getToTime(), timeRecordRequest.getFromTime())) {
+      throw new TimeRegisterException("Register time should be in a same date");
+    }
     timesheetRecord.setToTime(timeRecordRequest.getToTime());
     timesheetRecord.setFromTime(timeRecordRequest.getFromTime());
+    timesheetRecord.setCreatedDate(new Date());
+    timesheetRecord.setUpdatedDate(new Date());
+    timesheetRecord.setTimesheetType(timeRecordRequest.getType());
+    // TODO: Add logic check overlap time
     timesheetRecordRepository.save(timesheetRecord);
-
-    // TODO: move this to DtoTransformation
-    UserTimeRecordResponse userTimeRecordResponse = new UserTimeRecordResponse();
-    UserResponse responseUser = new UserResponse();
-    responseUser.setId(user.getId());
-    responseUser.setAddress(user.getAddress());
-    responseUser.setAccountId(user.getAccountId());
-    responseUser.setFirstName(user.getFirstName());
-    responseUser.setLastName(user.getLastName());
-    responseUser.setPhoneNumber(user.getPhoneNumber());
-    responseUser.setRoleName(user.getRoleName());
-    userTimeRecordResponse.setUser(responseUser);
 
     // TODO: return timesheet record of that month
     List<TimesheetRecord> listTimeSheetRecord =
-        timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(user);
-    List<TimeRecordResponse> timeRecordResponseList =
-        listTimeSheetRecord.stream()
-            .map(tsr -> new TimeRecordResponse())
-            .collect(Collectors.toList());
-    userTimeRecordResponse.setTimeRecords(timeRecordResponseList);
+        timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(user.getId());
+
+    UserTimeRecordResponse userTimeRecordResponse =
+        DtoTransformation.Object2UserTimeRecordResponse(listTimeSheetRecord, user);
 
     return userTimeRecordResponse;
   }

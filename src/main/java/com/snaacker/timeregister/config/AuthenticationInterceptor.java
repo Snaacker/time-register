@@ -28,13 +28,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws TimeRegisterBadRequestException {
     // TODO: dev only - this should be remove on production deploy/introduce dev profile
-    if (request.getRequestURI().contains("localhost")
-        && (request.getRequestURI().contains("swagger-resources")
-            || request.getRequestURI().contains("swagger-ui")
-            || request.getRequestURI().contains("v2/api-docs")
-            || request.getRequestURI().contains(".ico")
-            || request.getRequestURI().contains("/error")
-            || request.getRequestURI().contains("/webjars"))) {
+    if (request.getRequestURI().contains("swagger-resources")
+        || request.getRequestURI().contains("swagger-ui")
+        || request.getRequestURI().contains("v2/api-docs")
+        || request.getRequestURI().contains(".ico")
+        || request.getRequestURI().contains("/error")
+        || request.getRequestURI().contains("/webjars")) {
       return true;
     }
     final AllowAnonymous allowAnonymous =
@@ -72,7 +71,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         jwtTokenConfiguration.validateToken(jwtToken, authenticatedUser);
 
         // TODO: check authorization here
-        if (allowAdmin != null && !authenticatedUser.getRoleName().equals(Role.ADMIN)) {
+        if (allowAdmin != null
+            && (!authenticatedUser.getRoleName().equals(Role.ADMIN)
+                || !authenticatedUser.getRoleName().equals(Role.MANAGER))) {
           throw new TimeRegisterBadRequestException("Permission denied");
         }
         return true;

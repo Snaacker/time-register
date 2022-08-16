@@ -21,6 +21,9 @@ public class TimeRegisterGenericResponse<T> {
     @JsonProperty("offset")
     private int offset;
 
+    @JsonProperty("total")
+    private int total;
+
     TimeRegisterGenericResponse(){
         super();
     }
@@ -29,5 +32,6 @@ public class TimeRegisterGenericResponse<T> {
         this.genericObject = genericObject;
         this.pageSize = pageSize;
         this.offset = offset;
+        this.total = genericObject.size();
     }
 }

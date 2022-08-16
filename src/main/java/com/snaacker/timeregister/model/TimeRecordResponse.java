@@ -2,6 +2,7 @@ package com.snaacker.timeregister.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.snaacker.timeregister.persistent.TimesheetType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,7 @@ public class TimeRecordResponse {
 
   @JsonProperty("to_time")
   private Date toTime;
+
+  @JsonProperty("timesheet_type")
+  private TimesheetType timesheetType;
 }

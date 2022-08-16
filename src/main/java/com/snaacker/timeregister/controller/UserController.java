@@ -5,6 +5,7 @@ import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterException;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
 import com.snaacker.timeregister.model.*;
+import com.snaacker.timeregister.persistent.UserRestaurant;
 import com.snaacker.timeregister.service.TimesheetRecordService;
 import com.snaacker.timeregister.service.UserService;
 import com.snaacker.timeregister.utils.Constants;
@@ -69,7 +70,8 @@ public class UserController {
       @RequestParam(name = "pageSize", defaultValue = "0") int pageSize,
       @PathVariable long id,
       @RequestParam Date fromDate,
-      @RequestParam Date toDate) throws TimeRegisterObjectNotFoundException {
+      @RequestParam Date toDate)
+      throws TimeRegisterObjectNotFoundException {
 
     return new ResponseEntity<>(
         timesheetRecordService.getTimeRecordByUserId(id, fromDate, toDate, startPage, pageSize),
@@ -84,8 +86,9 @@ public class UserController {
         userService.addTimeRecord(id, timeRecordRequest), HttpStatus.CREATED);
   }
 
-  @PostMapping("/{id}/registration")
-  public ResponseEntity<UserTimeRecordResponse> editTimeRecord() {
+  @PostMapping("/{id}/registration/{record_id}")
+  public ResponseEntity<UserTimeRecordResponse> editTimeRecord(
+      @PathVariable Long id, @PathVariable Long record_id) {
     return null;
   }
 }

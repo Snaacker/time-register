@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
@@ -21,8 +21,10 @@ public class Restaurant extends BaseObject{
     private String name;
     @Column(name = "address")
     private String address;
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private List<User> users;
+    @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
+    private List<UserRestaurant> userRestaurant;
     @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
     private List<RestaurantConfigureData> restaurantConfigureData;
+    @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
+    private List<Schedule> schedule;
 }

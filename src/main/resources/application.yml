@@ -10,7 +10,7 @@ spring:
     defer-datasource-initialization: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mvc:
     pathmatch:

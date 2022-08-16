@@ -34,6 +34,7 @@ public class TimesheetRecordService {
         userRepository
             .findById(userId)
             .orElseThrow(() -> new TimeRegisterObjectNotFoundException("User not found"));
+    // TODO: Use SQL condition for better perfomance
     List<TimeRecordResponse> listTimeRecordResponse =
         timesheetRecordRepository.findByUsers(user, pageable).stream()
             .filter(x -> x.getFromTime().after(fromDate) && x.getToTime().before(toDate))
@@ -49,7 +50,7 @@ public class TimesheetRecordService {
     Pageable pageable = PageRequest.of(startPage, pageSize);
     List<TimeRecordResponse> listTimeRecordResponse =
         timesheetRecordRepository.findAll(pageable).stream()
-            .map(ts -> DtoTransformation.timesheetRecord2TimeRecordResponse(ts))
+            .map(DtoTransformation::timesheetRecord2TimeRecordResponse)
             .collect(Collectors.toList());
     return new TimeRegisterGenericResponse<>(listTimeRecordResponse, startPage, pageSize);
   }

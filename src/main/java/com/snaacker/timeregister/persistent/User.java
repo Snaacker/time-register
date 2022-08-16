@@ -44,12 +44,15 @@ public class User extends BaseObject {
   @Column(name = "is_admin")
   private boolean isAdmin;
 
+  @Column(name = "maximum_working_hours")
+  private int maximumWorkingHours;
+
+  @Column(name = "manager_note")
+  private String managerNoe;
+
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
   private List<TimesheetRecord> timesheetRecord;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Restaurant restaurant;
-
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-  private List<UserConfigureData> userConfigureData;
+  private List<UserRestaurant> userRestaurants;
 }

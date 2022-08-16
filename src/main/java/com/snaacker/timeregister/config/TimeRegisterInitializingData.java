@@ -9,6 +9,8 @@ import com.snaacker.timeregister.utils.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class TimeRegisterInitializingData {
     admin.setAdmin(true);
     admin.setRoleName(Role.ADMIN);
     admin.setPassword(password);
-    userRepository.save(admin);
+     userRepository.save(admin);
 
     User manager = new User();
     manager.setUsername("snaacker");
@@ -55,16 +57,5 @@ public class TimeRegisterInitializingData {
     employee.setEmail("duy@magdeburg.de");
     employee.setPassword(password);
     userRepository.save(employee);
-
-    Restaurant sushiDeli = new Restaurant();
-    sushiDeli.setAddress("City Square - Magdeburg");
-    sushiDeli.setName("Sushi deli");
-    List<User> listUser = new ArrayList<>();
-    listUser.add(manager);
-    listUser.add(employee);
-    sushiDeli.setUsers(listUser);
-
-    restaurantRepository.save(sushiDeli);
-
   }
 }
