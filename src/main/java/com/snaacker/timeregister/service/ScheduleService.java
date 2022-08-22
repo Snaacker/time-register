@@ -1,5 +1,6 @@
 package com.snaacker.timeregister.service;
 
+import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.model.ScheduleRequest;
 import com.snaacker.timeregister.model.ScheduleResponse;
 import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class ScheduleService {
 
@@ -19,17 +23,43 @@ public class ScheduleService {
   @Autowired private RestaurantRepository restaurantRepository;
 
   public TimeRegisterGenericResponse<ScheduleResponse> getScheduleOfRestaurant(int restaurantId) {
-    // TODO: Not implemented yet
+//    TODO: Finish me
     return null;
   }
 
-  public ScheduleResponse createSchedule(
-      Long id, ScheduleRequest scheduleRequest) {
+  public ScheduleResponse createSchedule(Long id, ScheduleRequest scheduleRequest) {
     Restaurant restaurant = restaurantRepository.getById(id);
+    if (null == restaurant) {
+      throw new TimeRegisterBadRequestException("Restaurant does not exist");
+    }
     Schedule newSchedule = new Schedule();
-    newSchedule.setScheduleTime(scheduleRequest.getScheduleTime());
+    newSchedule.setScheduleDate(scheduleRequest.getScheduleDate());
+    newSchedule.setFromTime(scheduleRequest.getFromTime());
+    newSchedule.setToTime(scheduleRequest.getToTime());
     Schedule schedule = scheduleRepository.save(newSchedule);
     return new ScheduleResponse(schedule);
+  }
+
+  public ScheduleResponse editSchedule(Long id, Long schedule_id, ScheduleRequest scheduleRequest) {
+    Restaurant restaurant = restaurantRepository.getById(id);
+    if (null == restaurant) {
+      throw new TimeRegisterBadRequestException("Restaurant does not exist");
+    }
+    Schedule schedule = scheduleRepository.getById(schedule_id);
+    if (null == schedule){
+      throw new TimeRegisterBadRequestException("Schedule record does not exist");
+    }
+    if (null != scheduleRequest.getScheduleDate()){
+      schedule.setScheduleDate(scheduleRequest.getScheduleDate());
+    }
+    if (null != scheduleRequest.getToTime()){
+      schedule.setToTime(scheduleRequest.getToTime());
+    }
+    if (null != scheduleRequest.getFromTime()){
+      schedule.setFromTime(scheduleRequest.getFromTime());
+    }
+    schedule.setUpdatedDate(new Date());
+    return new ScheduleResponse(scheduleRepository.save(schedule));
   }
 
   //  public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {

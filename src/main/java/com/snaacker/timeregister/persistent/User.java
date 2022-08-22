@@ -1,6 +1,8 @@
 package com.snaacker.timeregister.persistent;
 
+import com.snaacker.timeregister.model.UserRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "users")
+@NoArgsConstructor
 @RestResource(exported = false)
 public class User extends BaseObject {
 
@@ -55,4 +58,8 @@ public class User extends BaseObject {
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
   private List<UserRestaurant> userRestaurants;
+
+  public User(UserRequest userRequest){
+
+  }
 }

@@ -29,4 +29,8 @@ public class RestaurantRequest {
     private String name;
     @JsonProperty("address")
     private String address;
+    @JsonProperty("user_restaurant")
+    private List<UserRestaurantDto> userRestaurantDto;
+    @JsonProperty("restaurant_data")
+    private List<RestaurantDataDto> restaurantDataDto;
 }

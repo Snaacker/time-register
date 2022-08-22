@@ -13,6 +13,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleRequest {
-    @JsonProperty("schedule_time")
-    private Date scheduleTime;
+    @JsonProperty("schedule_date")
+    private Date scheduleDate;
+    @JsonProperty("from_time")
+    private Date fromTime;
+    @JsonProperty("to_time")
+    private Date toTime;
 }

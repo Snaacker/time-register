@@ -127,9 +127,6 @@ public class UserService {
     timesheetRecord.setUsers(user);
     // TODO: Add logic check working time (working time constrain)
 
-    if (!Utilities.isSameDay(timeRecordRequest.getToTime(), timeRecordRequest.getFromTime())) {
-      throw new TimeRegisterException("Register time should be in a same date");
-    }
     timesheetRecord.setToTime(timeRecordRequest.getToTime());
     timesheetRecord.setFromTime(timeRecordRequest.getFromTime());
     timesheetRecord.setCreatedDate(new Date());

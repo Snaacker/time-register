@@ -1,10 +1,7 @@
 package com.snaacker.timeregister.controller;
 
 import com.snaacker.timeregister.annotation.AllowAdmin;
-import com.snaacker.timeregister.model.RestaurantResponse;
-import com.snaacker.timeregister.model.ScheduleRequest;
-import com.snaacker.timeregister.model.ScheduleResponse;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.*;
 import com.snaacker.timeregister.service.RestaurantService;
 import com.snaacker.timeregister.service.ScheduleService;
 import com.snaacker.timeregister.utils.Constants;
@@ -18,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantController {
 
   @Autowired RestaurantService restaurantService;
-  @Autowired
-  ScheduleService scheduleService;
+  @Autowired ScheduleService scheduleService;
 
   @GetMapping("/")
   public ResponseEntity<TimeRegisterGenericResponse<RestaurantResponse>> getListRestaurant(
@@ -36,15 +32,17 @@ public class RestaurantController {
   }
 
   @PutMapping("/")
-  public ResponseEntity<RestaurantResponse> createRestaurant() {
-    // TODO: Not implement yet
-    return null;
+  public ResponseEntity<RestaurantResponse> createRestaurant(
+      @RequestBody RestaurantRequest restaurantRequest) {
+    return new ResponseEntity<>(
+        restaurantService.createRestaurant(restaurantRequest), HttpStatus.CREATED);
   }
 
   @PostMapping("/{id}")
-  public ResponseEntity<RestaurantResponse> editRestaurant(@PathVariable Long id) {
-    // TODO: Not implement yet
-    return null;
+  public ResponseEntity<RestaurantResponse> editRestaurant(
+      @PathVariable Long id, @RequestBody RestaurantRequest restaurantRequest) {
+    return new ResponseEntity<>(
+        restaurantService.editRestaurant(id, restaurantRequest), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
@@ -56,14 +54,17 @@ public class RestaurantController {
   @PutMapping("/{id}/schedule")
   public ResponseEntity<ScheduleResponse> createSchedule(
       @PathVariable Long id, @RequestBody ScheduleRequest scheduleRequest) {
-    return new ResponseEntity<>(scheduleService.createSchedule(id, scheduleRequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        scheduleService.createSchedule(id, scheduleRequest), HttpStatus.CREATED);
   }
 
   @AllowAdmin
   @PostMapping("/{id}/schedule/{schedule_id}")
   public ResponseEntity<ScheduleResponse> editSchedule(
-      @PathVariable Long id, @PathVariable Long schedule_id) {
-    // TODO: Not implemented yet
-    return null;
+      @PathVariable Long id,
+      @PathVariable Long schedule_id,
+      @RequestBody ScheduleRequest scheduleRequest) {
+    return new ResponseEntity<>(
+        scheduleService.editSchedule(id, schedule_id, scheduleRequest), HttpStatus.OK);
   }
 }

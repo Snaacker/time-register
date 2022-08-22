@@ -1,10 +1,9 @@
 package com.snaacker.timeregister.utils;
 
 import com.snaacker.timeregister.model.*;
-import com.snaacker.timeregister.persistent.Restaurant;
-import com.snaacker.timeregister.persistent.TimesheetRecord;
-import com.snaacker.timeregister.persistent.User;
+import com.snaacker.timeregister.persistent.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,4 +84,37 @@ public class DtoTransformation {
     return timeRecordResponse;
   }
 
+  public static Restaurant restaurantRequest2Restaurant(RestaurantRequest restaurantRequest) {
+    Restaurant restaurant = new Restaurant();
+    restaurant.setName(restaurantRequest.getName());
+    restaurant.setAddress(restaurantRequest.getAddress());
+    if (null != restaurantRequest.getUserRestaurant()) {
+      restaurant.setUserRestaurant(
+          restaurantRequest.getUserRestaurant().stream()
+              .map(DtoTransformation::UserRestaurantDto2UserRestaurant)
+              .collect(Collectors.toList()));
+    }
+    if (null != restaurantRequest.getRestaurantDataDtos()) {
+      restaurant.setRestaurantConfigureData(
+          restaurantRequest.getRestaurantDataDtos().stream()
+              .map(DtoTransformation::restaurantDataDto2RestaurantConfigureData)
+              .collect(Collectors.toList()));
+    }
+    return restaurant;
+  }
+
+  private static UserRestaurant UserRestaurantDto2UserRestaurant(UserRestaurantDto userRestaurantDto) {
+    UserRestaurant userRestaurant = new UserRestaurant();
+
+//    userRestaurant.setUsers();
+    userRestaurant.setRestaurantManager(userRestaurantDto.isManager());
+    return userRestaurant;
+  }
+
+  private static RestaurantConfigureData restaurantDataDto2RestaurantConfigureData(
+      RestaurantDataDto restaurantDataDto) {
+    RestaurantConfigureData restaurantConfigureData = new RestaurantConfigureData();
+    restaurantConfigureData.setTimesheetClosingDate(restaurantDataDto.getTimesheetClosingDate());
+    return restaurantConfigureData;
+  }
 }

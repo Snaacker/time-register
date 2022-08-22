@@ -1,5 +1,9 @@
 package com.snaacker.timeregister.persistent;
 
+import com.snaacker.timeregister.model.UserRestaurantDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
@@ -9,6 +13,9 @@ import java.io.Serializable;
 @Table(name = "user_restaurant")
 @IdClass(UserRestaurantId.class)
 @RestResource(exported = false)
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserRestaurant implements Serializable {
 
     @Id
@@ -23,4 +30,8 @@ public class UserRestaurant implements Serializable {
 
     @Column(name = "is_restaurant_manager")
     private boolean isRestaurantManager;
+
+    public UserRestaurant(UserRestaurantDto userRestaurantDto){
+        this.isRestaurantManager = userRestaurantDto.isManager();
+    }
 }

@@ -14,6 +14,9 @@ import java.util.Date;
 @RestResource(exported = false)
 public class TimesheetRecord extends BaseObject {
 
+  @Column(name = "working_date", nullable = false, unique = true)
+  private Date workingDate;
+  
   @Column(name = "from_time")
   private Date fromTime;
 
@@ -22,6 +25,7 @@ public class TimesheetRecord extends BaseObject {
 
   @Column(name = "timesheet_type")
   private TimesheetType timesheetType;
+
   @Column(name = "is_ready_for_review")
   private boolean isReadyForReview;
 

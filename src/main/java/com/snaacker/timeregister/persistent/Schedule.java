@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -17,7 +14,14 @@ import java.util.Date;
 @RestResource(exported = false)
 public class Schedule extends BaseObject{
 
-    private Date scheduleTime;
+    @Column(name = "schedule_date", nullable = false, unique = true)
+    private Date scheduleDate;
+
+    @Column(name = "from_time")
+    private Date fromTime;
+
+    @Column(name = "to_time")
+    private Date toTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
