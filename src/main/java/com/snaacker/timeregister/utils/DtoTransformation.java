@@ -88,15 +88,15 @@ public class DtoTransformation {
     Restaurant restaurant = new Restaurant();
     restaurant.setName(restaurantRequest.getName());
     restaurant.setAddress(restaurantRequest.getAddress());
-    if (null != restaurantRequest.getUserRestaurant()) {
+    if (null != restaurantRequest.getUserRestaurantDto()) {
       restaurant.setUserRestaurant(
-          restaurantRequest.getUserRestaurant().stream()
+          restaurantRequest.getUserRestaurantDto().stream()
               .map(DtoTransformation::UserRestaurantDto2UserRestaurant)
               .collect(Collectors.toList()));
     }
-    if (null != restaurantRequest.getRestaurantDataDtos()) {
+    if (null != restaurantRequest.getRestaurantDataDto()) {
       restaurant.setRestaurantConfigureData(
-          restaurantRequest.getRestaurantDataDtos().stream()
+          restaurantRequest.getRestaurantDataDto().stream()
               .map(DtoTransformation::restaurantDataDto2RestaurantConfigureData)
               .collect(Collectors.toList()));
     }

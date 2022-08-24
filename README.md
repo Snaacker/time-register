@@ -10,14 +10,8 @@ Application for register working time
 On local, export these values
 
 ```
-export DATABASE_URL_CUSTOMIZE=$DATABASE_URL
-export USER_NAME=$DB_USER_NAME
-export USER_PASSWORD=$DB_USER_PASSWORD
-export JWT_SECRET_KEY=$JWT_SECRET_KEY
+./startup.sh
 ```
-After that run
-
-```./gradlew bootRun```
 
 ## Swagger REST API documentation
 Start application and access http://localhost:8080/swagger-ui/#/

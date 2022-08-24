@@ -43,3 +43,17 @@ bootJar {
 jar {
     archiveClassifier.set('')
 }
+
+task dockerContext(type: Copy, dependsOn: build) {
+    from "build/libs/time-register-server-boot.jar"
+    into "docker"
+}
+
+task buildDocker(type: Exec, dependsOn: dockerContext) {
+    workingDir "${projectDir}"
+    commandLine 'bash', '-c', 'cd docker && docker build -t time-register:latest .'
+    doLast {
+        file("${projectDir}/docker/time-register-server-boot.jar").delete()
+    }
+}
+
