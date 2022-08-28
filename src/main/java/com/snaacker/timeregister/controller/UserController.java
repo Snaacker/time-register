@@ -22,8 +22,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-  @Autowired private UserService userService;
-  @Autowired TimesheetRecordService timesheetRecordService;
+  private UserService userService;
+  private TimesheetRecordService timesheetRecordService;
+
+  @Autowired
+  public UserController(final UserService userService, final TimesheetRecordService timesheetRecordService) {
+    this.userService = userService;
+    this.timesheetRecordService = timesheetRecordService;
+  }
 
   @GetMapping("/{id}")
   public ResponseEntity<UserResponse> getUserById(@PathVariable Long id)

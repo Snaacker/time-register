@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/restaurant")
 public class RestaurantController {
 
-  @Autowired RestaurantService restaurantService;
-  @Autowired ScheduleService scheduleService;
+  private RestaurantService restaurantService;
+  private ScheduleService scheduleService;
+
+  @Autowired
+  public RestaurantController(final RestaurantService restaurantService, final ScheduleService scheduleService) {
+    this.restaurantService = restaurantService;
+    this.scheduleService = scheduleService;
+  }
 
   @GetMapping("/")
   public ResponseEntity<TimeRegisterGenericResponse<RestaurantResponse>> getListRestaurant(

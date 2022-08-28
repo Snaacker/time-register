@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/registration")
 public class TimeRegistrationController {
 
-  @Autowired TimesheetRecordService timesheetRecordService;
+  private TimesheetRecordService timesheetRecordService;
+
+  @Autowired
+  public TimeRegistrationController(final TimesheetRecordService timesheetRecordService) {
+    this.timesheetRecordService = timesheetRecordService;
+  }
 
   @GetMapping("")
   public ResponseEntity<TimeRegisterGenericResponse<TimeRecordResponse>> getAllTimeRecord(

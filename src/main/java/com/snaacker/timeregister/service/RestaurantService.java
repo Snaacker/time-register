@@ -22,7 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class RestaurantService {
 
-  @Autowired private RestaurantRepository restaurantRepository;
+  private RestaurantRepository restaurantRepository;
+
+  @Autowired
+  public RestaurantService(final RestaurantRepository restaurantRepository) {
+    this.restaurantRepository = restaurantRepository;
+  }
 
   public TimeRegisterGenericResponse<RestaurantResponse> getAllRestaurant(
       int startingPage, int pageSize) {

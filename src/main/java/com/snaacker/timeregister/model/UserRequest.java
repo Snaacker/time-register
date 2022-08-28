@@ -22,6 +22,9 @@ public class UserRequest {
   @JsonProperty("account_id")
   private String accountId;
 
+  @JsonProperty("user_name")
+  private String userName;
+
   @JsonProperty("first_name")
   private String firstName;
 

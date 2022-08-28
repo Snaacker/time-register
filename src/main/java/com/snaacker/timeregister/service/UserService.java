@@ -32,8 +32,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-  @Autowired private UserRepository userRepository;
-  @Autowired private TimesheetRecordRepository timesheetRecordRepository;
+  private UserRepository userRepository;
+  private TimesheetRecordRepository timesheetRecordRepository;
+
+  @Autowired
+  public UserService(final UserRepository userRepository, final TimesheetRecordRepository timesheetRecordRepository) {
+    this.userRepository = userRepository;
+    this.timesheetRecordRepository = timesheetRecordRepository;
+  }
 
   public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {
 

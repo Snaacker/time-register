@@ -27,14 +27,21 @@ import java.util.Base64;
 @RestController
 @RequestMapping("/api/v1/authentication")
 public class AuthenticateController {
-  @Autowired private UserRepository userRepository;
+  private UserRepository userRepository;
 
-  @Autowired private JwtTokenConfiguration jwtTokenConfiguration;
+  private JwtTokenConfiguration jwtTokenConfiguration;
+
+  @Autowired
+  public AuthenticateController(
+      final UserRepository userRepository, final JwtTokenConfiguration jwtTokenConfiguration) {
+    this.userRepository = userRepository;
+    this.jwtTokenConfiguration = jwtTokenConfiguration;
+  }
 
   @AllowAnonymous
   @PostMapping("")
   public ResponseEntity<String> authenticate(@RequestHeader("Authorization") String credential)
-          throws TimeRegisterUnauthorizedException, TimeRegisterBadRequestException {
+      throws TimeRegisterUnauthorizedException, TimeRegisterBadRequestException {
     byte[] decodedBytes = Base64.getDecoder().decode(credential);
     String decodedString = new String(decodedBytes);
     String[] userCredential = decodedString.split(":");

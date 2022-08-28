@@ -20,8 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class TimesheetRecordService {
 
-  @Autowired TimesheetRecordRepository timesheetRecordRepository;
-  @Autowired UserRepository userRepository;
+  private TimesheetRecordRepository timesheetRecordRepository;
+  private UserRepository userRepository;
+
+  @Autowired
+  public TimesheetRecordService(final TimesheetRecordRepository timesheetRecordRepository, final UserRepository userRepository) {
+    this.timesheetRecordRepository = timesheetRecordRepository;
+    this.userRepository = userRepository;
+  }
+
 
   public TimeRegisterGenericResponse<TimeRecordResponse> getTimeRecordByUserId(
       long userId, Date fromDate, Date toDate, int startPage, int pageSize)

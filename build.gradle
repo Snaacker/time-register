@@ -29,12 +29,24 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'com.h2database:h2:2.1.212'
 }
 
 tasks.named('test') {
+    filter {
+        excludeTestsMatching "*EndpointTest"
+    }
     useJUnitPlatform()
 }
 
+task integrationTest(type: Test) {
+    filter{
+        includeTestsMatching "*EndpointTest"
+    }
+    useJUnitPlatform()
+}
+
+check.dependsOn integrationTest
 // Add these START
 bootJar {
     archiveClassifier.set('boot')
@@ -51,7 +63,11 @@ task dockerContext(type: Copy, dependsOn: build) {
 
 task buildDocker(type: Exec, dependsOn: dockerContext) {
     workingDir "${projectDir}"
-    commandLine 'bash', '-c', 'cd docker && docker build -t time-register:latest .'
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', 'cd docker && docker build -t time-register:latest .'
+    } else {
+        commandLine 'bash', '-c', 'cd docker && docker build -t time-register:latest .'
+    }
     doLast {
         file("${projectDir}/docker/time-register-server-boot.jar").delete()
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Data
+@NoArgsConstructor
 @JsonIgnoreProperties(
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
@@ -23,11 +25,6 @@ public class TimeRegisterGenericResponse<T> {
 
     @JsonProperty("total")
     private int total;
-
-    TimeRegisterGenericResponse(){
-        super();
-    }
-
     public TimeRegisterGenericResponse(List<T> genericObject, int pageSize, int offset){
         this.genericObject = genericObject;
         this.pageSize = pageSize;

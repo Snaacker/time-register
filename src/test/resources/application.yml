@@ -9,10 +9,13 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 jwt:
   secret: test
   token-expires-after-days: 14

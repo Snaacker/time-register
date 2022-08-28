@@ -3,6 +3,7 @@ package com.snaacker.timeregister.config;
 import com.snaacker.timeregister.annotation.AllowAdmin;
 import com.snaacker.timeregister.annotation.AllowAnonymous;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
+import com.snaacker.timeregister.exception.TimeRegisterUserNotAllowException;
 import com.snaacker.timeregister.model.UserResponse;
 import com.snaacker.timeregister.persistent.Role;
 import com.snaacker.timeregister.persistent.User;
@@ -73,8 +74,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // TODO: check authorization here
         if (allowAdmin != null
             && (!authenticatedUser.getRoleName().equals(Role.ADMIN)
-                || !authenticatedUser.getRoleName().equals(Role.MANAGER))) {
-          throw new TimeRegisterBadRequestException("Permission denied");
+                && !authenticatedUser.getRoleName().equals(Role.MANAGER))) {
+          throw new TimeRegisterUserNotAllowException("Permission denied");
         }
         return true;
       } else {

@@ -19,8 +19,17 @@ import java.util.List;
 @Service
 public class ScheduleService {
 
-  @Autowired private ScheduleRepository scheduleRepository;
-  @Autowired private RestaurantRepository restaurantRepository;
+  private ScheduleRepository scheduleRepository;
+  private RestaurantRepository restaurantRepository;
+
+  @Autowired
+
+  public ScheduleService(final ScheduleRepository scheduleRepository, final RestaurantRepository restaurantRepository) {
+    this.scheduleRepository = scheduleRepository;
+    this.restaurantRepository = restaurantRepository;
+  }
+
+
 
   public TimeRegisterGenericResponse<ScheduleResponse> getScheduleOfRestaurant(int restaurantId) {
 //    TODO: Finish me

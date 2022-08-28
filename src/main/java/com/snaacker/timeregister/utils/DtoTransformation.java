@@ -37,6 +37,8 @@ public class DtoTransformation {
   public static User dto2User(UserRequest requestUser) {
     User user = new User();
     user.setAddress(requestUser.getAddress());
+    user.setEmail(requestUser.getEmail());
+    user.setUsername(requestUser.getUserName());
     user.setAccountId(requestUser.getAccountId());
     user.setFirstName(requestUser.getFirstName());
     user.setLastName(requestUser.getLastName());
