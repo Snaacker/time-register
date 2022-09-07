@@ -19,20 +19,30 @@ import java.util.List;
 @Table(name = "restaurant")
 @NoArgsConstructor
 @RestResource(exported = false)
-public class Restaurant extends BaseObject{
-    @Column(name = "name")
-    private String name;
-    @Column(name = "address")
-    private String address;
-    @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
-    private List<UserRestaurant> userRestaurant;
-    @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
-    private List<RestaurantConfigureData> restaurantConfigureData;
-    @OneToMany(mappedBy = "restaurant", cascade =  CascadeType.MERGE)
-    private List<Schedule> schedule;
+public class Restaurant extends BaseObject {
+  @Column(name = "name")
+  private String name;
 
-    public Restaurant(RestaurantRequest restaurantRequest){
-        this.name = restaurantRequest.getName();
-        this.address = restaurantRequest.getAddress();
-    }
+  @Column(name = "address")
+  private String address;
+
+  @Column(name = "email")
+  private String email;
+
+  @Column(name = "phone_number")
+  private String phoneNumber;
+
+  @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
+  private List<UserRestaurant> userRestaurant;
+
+  @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
+  private List<RestaurantConfigureData> restaurantConfigureData;
+
+  @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
+  private List<Schedule> schedule;
+
+  public Restaurant(RestaurantRequest restaurantRequest) {
+    this.name = restaurantRequest.getName();
+    this.address = restaurantRequest.getAddress();
+  }
 }

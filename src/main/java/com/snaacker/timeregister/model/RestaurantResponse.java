@@ -21,6 +21,11 @@ public class RestaurantResponse {
     @JsonProperty("address")
     private String address;
 
+    @JsonProperty("email")
+    private String email;
+
+    @JsonProperty("phone_number")
+    private String phoneNumber;
     public RestaurantResponse(Restaurant restaurant) {
         this.address = restaurant.getAddress();
         this.name = restaurant.getName();

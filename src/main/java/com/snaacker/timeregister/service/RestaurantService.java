@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,13 @@ public class RestaurantService {
   }
 
   public RestaurantResponse createRestaurant(RestaurantRequest restaurantRequest) {
-    Restaurant newRestaurant = DtoTransformation.restaurantRequest2Restaurant(restaurantRequest);
-    // TODO: convert dto to Restaurant Object
+    Restaurant newRestaurant;
+    try{
+    newRestaurant = DtoTransformation.restaurantRequest2Restaurant(restaurantRequest);
+    }catch (IllegalArgumentException e){
+      throw new TimeRegisterBadRequestException(e.getMessage());
+    }
+    // TODO: convert dto to Restaurant Object + check email format
     return new RestaurantResponse(restaurantRepository.save(newRestaurant));
   }
 
@@ -72,7 +78,7 @@ public class RestaurantService {
     return new RestaurantResponse(restaurantRepository.save(restaurant));
   }
 
-  private UserRestaurant userRestaurantDto2userRestaurant(UserRestaurantDto userRestaurantDto){
+  private UserRestaurant userRestaurantDto2userRestaurant(UserRestaurantDto userRestaurantDto) {
     UserRestaurant userRestaurant = new UserRestaurant(userRestaurantDto);
     userRestaurant.setUsers(new User(userRestaurantDto.getUserRequest()));
     userRestaurant.setRestaurant(new Restaurant(userRestaurantDto.getRestaurantRequest()));
@@ -89,7 +95,12 @@ public class RestaurantService {
   }
 
   public RestaurantResponse getRestaurantById(Long id) {
-    Restaurant restaurant = restaurantRepository.getById(id);
+    Restaurant restaurant;
+    try {
+      restaurant = restaurantRepository.getById(id);
+    } catch (EntityNotFoundException e) {
+      throw new TimeRegisterObjectNotFoundException("Can not find object" + e.getMessage());
+    }
     return new RestaurantResponse(restaurant);
   }
 }

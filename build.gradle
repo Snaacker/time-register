@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id "com.diffplug.spotless" version "6.10.0"
 }
 
 group = 'com.snaacker'
@@ -50,6 +51,21 @@ check.dependsOn integrationTest
 // Add these START
 bootJar {
     archiveClassifier.set('boot')
+}
+
+
+spotless {
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        // apply a specific flavor of google-java-format
+        googleJavaFormat('1.8').aosp().reflowLongStrings()
+    }
 }
 
 jar {

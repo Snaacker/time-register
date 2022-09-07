@@ -1,6 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.UserRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 @RestResource(exported = false)
 public class User extends BaseObject {
 
@@ -51,7 +53,7 @@ public class User extends BaseObject {
   private int maximumWorkingHours;
 
   @Column(name = "manager_note")
-  private String managerNoe;
+  private String managerNote;
 
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
   private List<TimesheetRecord> timesheetRecord;
@@ -59,7 +61,43 @@ public class User extends BaseObject {
   @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
   private List<UserRestaurant> userRestaurants;
 
-  public User(UserRequest userRequest){
+  public User(
+      String username,
+      String password,
+      String accountId,
+      String firstName,
+      String lastName,
+      String email,
+      String phoneNumber,
+      String address,
+      Role roleName) {
+    this.username = username;
+    this.password = password;
+    this.accountId = accountId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.address = address;
+    this.roleName = roleName;
+    this.maximumWorkingHours = maximumWorkingHours;
+    this.isAdmin = isAdmin;
+    this.managerNote = managerNote;
+    this.roleName = roleName;
+  }
 
+  public User(UserRequest userRequest) {
+    this.username = userRequest.getUserName();
+    this.password = userRequest.getPassword();
+    this.accountId = userRequest.getAccountId();
+    this.firstName = userRequest.getFirstName();
+    this.lastName = userRequest.getLastName();
+    this.email = userRequest.getEmail();
+    this.phoneNumber = userRequest.getPhoneNumber();
+    this.address = userRequest.getAddress();
+    this.roleName = userRequest.getRoleName();
+    this.maximumWorkingHours = userRequest.getMaximumWorkingHours();
+    this.isAdmin = userRequest.isAdmin();
+    this.managerNote = userRequest.getManagerNote();
   }
 }

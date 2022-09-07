@@ -20,11 +20,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneOffset;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,14 +27,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-  private UserRepository userRepository;
-  private TimesheetRecordRepository timesheetRecordRepository;
-
   @Autowired
-  public UserService(final UserRepository userRepository, final TimesheetRecordRepository timesheetRecordRepository) {
-    this.userRepository = userRepository;
-    this.timesheetRecordRepository = timesheetRecordRepository;
-  }
+  private UserRepository userRepository;
+  @Autowired
+  private TimesheetRecordRepository timesheetRecordRepository;
 
   public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {
 
@@ -48,7 +39,7 @@ public class UserService {
         userRepository.findAll(pageable).stream()
             .map(DtoTransformation::user2UserResponse)
             .collect(Collectors.toList());
-    return new TimeRegisterGenericResponse<>(listUser, startingPage, pageSize);
+    return new TimeRegisterGenericResponse<>(listUser, pageSize, startingPage);
   }
 
   public UserResponse createUser(UserRequest userRequest) throws TimeRegisterBadRequestException {

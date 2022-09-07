@@ -5,6 +5,7 @@ import com.snaacker.timeregister.model.RestaurantResponse;
 import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.repository.RestaurantRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,13 +26,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RestaurantServiceTest extends FixtureTest {
-  RestaurantRepository restaurantRepository;
+  static RestaurantRepository restaurantRepository;
 
-  @Autowired
-  RestaurantService restaurantService;
+  static RestaurantService restaurantService;
 
-  @BeforeEach
-  public void Setup(){
+  @BeforeAll
+  public static void Setup(){
     restaurantRepository = mock(RestaurantRepository.class);
     restaurantService = new RestaurantService(restaurantRepository);
   }

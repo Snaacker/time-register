@@ -45,4 +45,10 @@ public class UserRequest {
 
   @JsonProperty("password")
   private String password;
+  @JsonProperty("is_admin")
+  private boolean isAdmin;
+  @JsonProperty("maximum_working_hours")
+  private int maximumWorkingHours;
+  @JsonProperty("manager_note")
+  private String managerNote;
 }
