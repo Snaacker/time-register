@@ -20,6 +20,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +30,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-  @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private TimesheetRecordRepository timesheetRecordRepository;
+  @Autowired private UserRepository userRepository;
+  @Autowired private TimesheetRecordRepository timesheetRecordRepository;
 
   public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {
 
@@ -120,19 +121,34 @@ public class UserService {
   public UserTimeRecordResponse addTimeRecord(Long id, TimeRecordRequest timeRecordRequest)
       throws TimeRegisterException {
     User user = userRepository.findById(id).orElseThrow(TimeRegisterException::new);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    List<TimesheetRecord> listTimesheetRecord =
+        timesheetRecordRepository.findRecordByWorkingDateAndUserId(
+            dateFormat.format(timeRecordRequest.getFromTime()), id);
+    listTimesheetRecord.stream().forEach(timesheetRecord -> {
+      // TODO: verify the logi
+      if (timeRecordRequest.getFromTime().compareTo(timesheetRecord.getFromTime()) > 0 && timeRecordRequest.getToTime().compareTo(timesheetRecord.getToTime()) < 0){
+        throw new TimeRegisterBadRequestException("Invalid timeline");
+      }
+      if (timeRecordRequest.getFromTime().compareTo(timesheetRecord.getFromTime()) < 0 && timeRecordRequest.getToTime().compareTo(timesheetRecord.getToTime()) < 0  && timeRecordRequest.getToTime().compareTo(timesheetRecord.getFromTime()) < 0){
+        throw new TimeRegisterBadRequestException("Invalid timeline");
+      }
+      if (timeRecordRequest.getFromTime().compareTo(timesheetRecord.getFromTime()) > 0 && timeRecordRequest.getToTime().compareTo(timesheetRecord.getToTime()) > 0  && timeRecordRequest.getFromTime().compareTo(timesheetRecord.getToTime()) > 0){
+        throw new TimeRegisterBadRequestException("Invalid timeline");
+      }
+    });
     TimesheetRecord timesheetRecord = new TimesheetRecord();
     timesheetRecord.setUsers(user);
     // TODO: Add logic check working time (working time constrain)
-
+    timesheetRecord.setWorkingDate(dateFormat.format(timeRecordRequest.getFromTime()));
     timesheetRecord.setToTime(timeRecordRequest.getToTime());
     timesheetRecord.setFromTime(timeRecordRequest.getFromTime());
     timesheetRecord.setCreatedDate(new Date());
     timesheetRecord.setUpdatedDate(new Date());
     timesheetRecord.setTimesheetType(timeRecordRequest.getType());
-    // TODO: Add logic check overlap time
     timesheetRecordRepository.save(timesheetRecord);
 
-    // TODO: return timesheet record of that month
+    // TODO: return timesheet record of that week
     List<TimesheetRecord> listTimeSheetRecord =
         timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(user.getId());
 
