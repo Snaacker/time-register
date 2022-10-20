@@ -47,7 +47,7 @@ tasks.named('test') {
 //    useJUnitPlatform()
 //}
 
-check.dependsOn integrationTest
+//check.dependsOn integrationTest
 // Add these START
 bootJar {
     archiveClassifier.set('boot')
