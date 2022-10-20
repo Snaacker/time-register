@@ -11,21 +11,20 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user_restaurant")
-@IdClass(UserRestaurantId.class)
 @RestResource(exported = false)
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRestaurant implements Serializable {
+public class UserRestaurant extends BaseObject implements Serializable {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
     private User users;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
     @Column(name = "is_restaurant_manager")

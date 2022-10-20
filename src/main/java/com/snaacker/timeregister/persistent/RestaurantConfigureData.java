@@ -15,14 +15,20 @@ import java.util.Date;
 @Table(name = "restaurant_configure_data")
 @NoArgsConstructor
 @RestResource(exported = false)
-public class RestaurantConfigureData extends BaseObject{
-    @Column(name = "timesheet_closing_date", unique = true)
-    private Date timesheetClosingDate;
+public class RestaurantConfigureData extends BaseObject {
+  @Column(name = "timesheet_closing_date", unique = true)
+  private Date timesheetClosingDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Restaurant restaurant;
+  @Column(name = "opening_hour")
+  private int openingHour;
 
-    public RestaurantConfigureData(RestaurantDataDto restaurantDataDto){
-        this.timesheetClosingDate = restaurantDataDto.getTimesheetClosingDate();
-    }
+  @Column(name = "closing_hour")
+  private int closingHour;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Restaurant restaurant;
+
+  public RestaurantConfigureData(RestaurantDataDto restaurantDataDto) {
+    this.timesheetClosingDate = restaurantDataDto.getTimesheetClosingDate();
+  }
 }

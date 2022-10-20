@@ -21,8 +21,6 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -126,7 +124,7 @@ public class UserService {
         timesheetRecordRepository.findRecordByWorkingDateAndUserId(
             dateFormat.format(timeRecordRequest.getFromTime()), id);
     listTimesheetRecord.stream().forEach(timesheetRecord -> {
-      // TODO: verify the logi
+      // TODO: verify the logic
       if (timeRecordRequest.getFromTime().compareTo(timesheetRecord.getFromTime()) > 0 && timeRecordRequest.getToTime().compareTo(timesheetRecord.getToTime()) < 0){
         throw new TimeRegisterBadRequestException("Invalid timeline");
       }
@@ -138,7 +136,6 @@ public class UserService {
       }
     });
     TimesheetRecord timesheetRecord = new TimesheetRecord();
-    timesheetRecord.setUsers(user);
     // TODO: Add logic check working time (working time constrain)
     timesheetRecord.setWorkingDate(dateFormat.format(timeRecordRequest.getFromTime()));
     timesheetRecord.setToTime(timeRecordRequest.getToTime());
@@ -146,6 +143,7 @@ public class UserService {
     timesheetRecord.setCreatedDate(new Date());
     timesheetRecord.setUpdatedDate(new Date());
     timesheetRecord.setTimesheetType(timeRecordRequest.getType());
+    timesheetRecord.setUsers(user);
     timesheetRecordRepository.save(timesheetRecord);
 
     // TODO: return timesheet record of that week

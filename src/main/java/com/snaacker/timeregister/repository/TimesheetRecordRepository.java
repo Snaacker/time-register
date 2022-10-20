@@ -22,10 +22,17 @@ public interface TimesheetRecordRepository extends JpaRepository<TimesheetRecord
 
   @Query(
       value =
-          "SELECT COUNT(*) from timesheet_record t WHERE t.users_id = :users_id " +
+          "SELECT * from timesheet_record t WHERE t.users_id = :users_id " +
                   "AND t.from_time > :startOfDate " +
                   "AND t.to_time < :endOfDate",
       nativeQuery = true)
-  int findRecordInTimeRange(
-      OffsetDateTime startOfDate, OffsetDateTime endOfDate, Long users_id);
+  List<TimesheetRecord> findRecordInTimeRange(
+      String startOfDate, String endOfDate, Long users_id);
+
+  @Query(
+          value =
+                  "SELECT * from timesheet_record t WHERE t.users_id = :userId " +
+                          "AND t.working_date = :workingDate ",
+          nativeQuery = true)
+  List<TimesheetRecord> findRecordByWorkingDateAndUserId(String workingDate, Long userId);
 }

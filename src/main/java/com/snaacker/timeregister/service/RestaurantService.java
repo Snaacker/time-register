@@ -8,6 +8,7 @@ import com.snaacker.timeregister.persistent.RestaurantConfigureData;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.persistent.UserRestaurant;
 import com.snaacker.timeregister.repository.RestaurantRepository;
+import com.snaacker.timeregister.repository.UserRepository;
 import com.snaacker.timeregister.utils.Constants;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,10 @@ import java.util.stream.Collectors;
 @Service
 public class RestaurantService {
 
+  @Autowired
   private RestaurantRepository restaurantRepository;
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   public RestaurantService(final RestaurantRepository restaurantRepository) {

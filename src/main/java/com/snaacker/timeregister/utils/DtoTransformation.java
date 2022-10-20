@@ -40,6 +40,7 @@ public class DtoTransformation {
     user.setEmail(requestUser.getEmail());
     user.setUsername(requestUser.getUserName());
     user.setAccountId(requestUser.getAccountId());
+    user.setRoleName(requestUser.getRoleName());
     user.setFirstName(requestUser.getFirstName());
     user.setLastName(requestUser.getLastName());
     user.setPhoneNumber(requestUser.getPhoneNumber());

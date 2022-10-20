@@ -8,13 +8,13 @@ import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
-@NoArgsConstructor
 @AllArgsConstructor
 @RestResource(exported = false)
 public class User extends BaseObject {
@@ -84,6 +84,8 @@ public class User extends BaseObject {
     this.isAdmin = isAdmin;
     this.managerNote = managerNote;
     this.roleName = roleName;
+    this.createdDate = new Date();
+    this.updatedDate = new Date();
   }
 
   public User(UserRequest userRequest) {
@@ -99,5 +101,14 @@ public class User extends BaseObject {
     this.maximumWorkingHours = userRequest.getMaximumWorkingHours();
     this.isAdmin = userRequest.isAdmin();
     this.managerNote = userRequest.getManagerNote();
+    this.createdDate = new Date();
+    this.updatedDate = new Date();
+  }
+
+  public User(){
+    super();
+    this.createdDate = new Date();
+    this.updatedDate = new Date();
+
   }
 }

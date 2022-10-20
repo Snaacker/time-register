@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +25,12 @@ public class TimesheetRecordService {
   private UserRepository userRepository;
 
   @Autowired
-  public TimesheetRecordService(final TimesheetRecordRepository timesheetRecordRepository, final UserRepository userRepository) {
+  public TimesheetRecordService(
+      final TimesheetRecordRepository timesheetRecordRepository,
+      final UserRepository userRepository) {
     this.timesheetRecordRepository = timesheetRecordRepository;
     this.userRepository = userRepository;
   }
-
 
   public TimeRegisterGenericResponse<TimeRecordResponse> getTimeRecordByUserId(
       long userId, Date fromDate, Date toDate, int startPage, int pageSize)
@@ -36,15 +38,18 @@ public class TimesheetRecordService {
     userRepository
         .findById(userId)
         .orElseThrow(() -> new TimeRegisterObjectNotFoundException("User does not exist"));
-    Pageable pageable = PageRequest.of(startPage, pageSize);
     User user =
         userRepository
             .findById(userId)
             .orElseThrow(() -> new TimeRegisterObjectNotFoundException("User not found"));
-    // TODO: Use SQL condition for better perfomance
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    ;
     List<TimeRecordResponse> listTimeRecordResponse =
-        timesheetRecordRepository.findByUsers(user, pageable).stream()
-            .filter(x -> x.getFromTime().after(fromDate) && x.getToTime().before(toDate))
+        timesheetRecordRepository
+            .findRecordInTimeRange(
+                dateFormat.format(fromDate), dateFormat.format(toDate), user.getId())
+            .stream()
             .map(
                 timesheetRecord ->
                     DtoTransformation.timesheetRecord2TimeRecordResponse(timesheetRecord))

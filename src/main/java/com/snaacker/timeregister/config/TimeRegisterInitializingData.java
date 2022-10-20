@@ -9,14 +9,9 @@ import com.snaacker.timeregister.utils.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 
 @Component
 public class TimeRegisterInitializingData {
@@ -57,5 +52,12 @@ public class TimeRegisterInitializingData {
     employee.setEmail("duy@magdeburg.de");
     employee.setPassword(password);
     userRepository.save(employee);
+
+    Restaurant restaurant = new Restaurant();
+    restaurant.setName("Tokyo Sushi");
+    restaurant.setAddress("Berlin Germany");
+    restaurant.setPhoneNumber("123-456-789");
+    restaurantRepository.save(restaurant);
+
   }
 }

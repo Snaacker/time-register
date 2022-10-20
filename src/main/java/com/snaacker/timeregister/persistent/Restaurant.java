@@ -11,13 +11,13 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "restaurant")
-@NoArgsConstructor
 @RestResource(exported = false)
 public class Restaurant extends BaseObject {
   @Column(name = "name")
@@ -44,5 +44,13 @@ public class Restaurant extends BaseObject {
   public Restaurant(RestaurantRequest restaurantRequest) {
     this.name = restaurantRequest.getName();
     this.address = restaurantRequest.getAddress();
+    this.createdDate = new Date();
+    this.updatedDate = new Date();
+  }
+
+  public Restaurant(){
+    super();
+    this.createdDate = new Date();
+    this.updatedDate = new Date();
   }
 }

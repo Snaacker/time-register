@@ -15,15 +15,15 @@ public class BaseObject {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  protected long id;
 
   @Column(name = "created_date")
-  private Date createdDate;
+  protected Date createdDate;
 
   @Column(name = "updated_date")
-  private Date updatedDate;
+  protected Date updatedDate;
 
   @Column(name = "description")
-  private String description;
+  protected String description;
 
 }
