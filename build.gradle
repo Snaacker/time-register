@@ -40,12 +40,12 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task integrationTest(type: Test) {
-    filter{
-        includeTestsMatching "*EndpointTest"
-    }
-    useJUnitPlatform()
-}
+//task integrationTest(type: Test) {
+//    filter{
+//        includeTestsMatching "*EndpointTest"
+//    }
+//    useJUnitPlatform()
+//}
 
 check.dependsOn integrationTest
 // Add these START
