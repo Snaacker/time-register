@@ -32,17 +32,17 @@ public class UserEndpointTest {
   @MockBean
   private UserService userService;
 
-  @Disabled("Enabled after correct")
-  @Test
-  public void testCreateUserShouldSuccessfully() throws Exception {
-    UserResponse userResponse = new UserResponse();
-    userResponse.setUsername("TestUser");
-    when(userService.createUser(any())).thenReturn(userResponse);
-    mockMvc
-        .perform(put("/api/v1/user"))
-        .andDo(print())
-        .andExpect(status().isOk())
-            .andExpect(jsonPath("$", Matchers.hasSize(1)));
-//        .andExpect(content().string(contains("TestUser")));
-  }
+//  @Disabled("Enabled after correct")
+//  @Test
+//  public void testCreateUserShouldSuccessfully() throws Exception {
+//    UserResponse userResponse = new UserResponse();
+//    userResponse.setUsername("TestUser");
+//    when(userService.createUser(any())).thenReturn(userResponse);
+//    mockMvc
+//        .perform(put("/api/v1/user"))
+//        .andDo(print())
+//        .andExpect(status().isOk())
+//            .andExpect(jsonPath("$", Matchers.hasSize(1)));
+////        .andExpect(content().string(contains("TestUser")));
+//  }
 }

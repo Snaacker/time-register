@@ -25,7 +25,7 @@ public class TimeRegistrationController {
   public ResponseEntity<TimeRegisterGenericResponse<TimeRecordResponse>> getAllTimeRecord(
       @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_START_PAGE + "")
           int startPage,
-      @RequestParam(name = "startPage", defaultValue = "0") int pageSize) {
+      @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_PAGE_SIZE + "") int pageSize) {
     return new ResponseEntity<>(
         timesheetRecordService.getAllTimeRecord(startPage, pageSize), HttpStatus.OK);
   }

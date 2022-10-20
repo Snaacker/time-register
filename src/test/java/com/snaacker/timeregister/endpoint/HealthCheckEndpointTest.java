@@ -25,11 +25,11 @@ public class HealthCheckEndpointTest {
 
     @Autowired
     protected MockMvc mockMvc;
-    @Disabled("Enable after correct this")
-    @Test
-    public void testHealthCheckShouldReturnSuccess() throws Exception {
-
-        mockMvc.perform(get("/api/v1/health_check")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("OK")));
-    }
+//    @Disabled("Enable after correct this")
+//    @Test
+//    public void testHealthCheckShouldReturnSuccess() throws Exception {
+//
+//        mockMvc.perform(get("/api/v1/health_check")).andDo(print()).andExpect(status().isOk())
+//                .andExpect(content().string(containsString("OK")));
+//    }
 }

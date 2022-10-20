@@ -44,7 +44,6 @@ public class TimesheetRecordService {
             .orElseThrow(() -> new TimeRegisterObjectNotFoundException("User not found"));
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    ;
     List<TimeRecordResponse> listTimeRecordResponse =
         timesheetRecordRepository
             .findRecordInTimeRange(

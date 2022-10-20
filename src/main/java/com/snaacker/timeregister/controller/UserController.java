@@ -42,7 +42,7 @@ public class UserController {
   public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getListUser(
       @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
           int startPage,
-      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+      @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "") int pageSize) {
     return new ResponseEntity<>(userService.getListUser(startPage, pageSize), HttpStatus.OK);
   }
 
@@ -73,7 +73,7 @@ public class UserController {
   public ResponseEntity<TimeRegisterGenericResponse<TimeRecordResponse>> getAllRegisteredTimeByUser(
       @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
           int startPage,
-      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+      @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "") int pageSize,
       @PathVariable long id,
       @RequestParam Date fromDate,
       @RequestParam Date toDate)
