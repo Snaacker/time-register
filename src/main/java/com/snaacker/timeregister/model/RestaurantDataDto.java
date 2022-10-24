@@ -1,15 +1,13 @@
 package com.snaacker.timeregister.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.RestaurantConfigureData;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -21,7 +19,7 @@ import java.util.Date;
 public class RestaurantDataDto implements Serializable {
     private Date timesheetClosingDate;
 
-    public RestaurantDataDto(RestaurantConfigureData restaurantConfigureData){
+    public RestaurantDataDto(RestaurantConfigureData restaurantConfigureData) {
         this.timesheetClosingDate = restaurantConfigureData.getTimesheetClosingDate();
     }
 }

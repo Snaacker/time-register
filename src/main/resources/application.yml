@@ -10,11 +10,32 @@ spring:
     defer-datasource-initialization: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+  #  kafka:
+  #    producer:
+  #      bootstrap-servers: 127.0.0.1:9092
+  #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      group-id: group_id
+  #    consumer:
+  #      client-id: client_id
+  #      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  # Producer properties
+  #topic:
+  #  name:
+  #    producer: topico.comando.teste
+
+# Common Kafka Properties
+#auto:
+#  create:
+#    topics:
+#      enable: true
 
 jwt:
   secret: ${JWT_SECRET_KEY}

@@ -1,5 +1,5 @@
 # Time register application
-Application for register working time 
+Application for register working time
 
 ## Prerequisite
 - Java 18
@@ -15,4 +15,3 @@ On local, export these values
 
 ## Swagger REST API documentation
 Start application and access http://localhost:8080/swagger-ui/#/
-

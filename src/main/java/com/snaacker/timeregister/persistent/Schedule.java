@@ -1,18 +1,17 @@
 package com.snaacker.timeregister.persistent;
 
+import java.util.Date;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
-
-import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "schedule")
 @Getter
 @Setter
 @RestResource(exported = false)
-public class Schedule extends BaseObject{
+public class Schedule extends BaseObject {
 
     @Column(name = "schedule_date", nullable = false, unique = true)
     private Date scheduleDate;

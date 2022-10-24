@@ -10,26 +10,26 @@ import org.springframework.web.filter.CorsFilter;
 @SpringBootApplication
 public class TimeRegisterServerApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(TimeRegisterServerApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(TimeRegisterServerApplication.class, args);
+    }
 
-  @Bean
-  public CorsFilter corsFilter() {
+    @Bean
+    public CorsFilter corsFilter() {
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    CorsConfiguration config = new CorsConfiguration();
-    //config.setAllowCredentials(true); // you USUALLY want this
-    config.addAllowedOrigin("*");
-    config.addAllowedHeader("*");
-    config.addAllowedMethod("OPTIONS");
-    config.addAllowedMethod("HEAD");
-    config.addAllowedMethod("GET");
-    config.addAllowedMethod("PUT");
-    config.addAllowedMethod("POST");
-    config.addAllowedMethod("DELETE");
-    config.addAllowedMethod("PATCH");
-    source.registerCorsConfiguration("/**", config);
-    return new CorsFilter(source);
-  }
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        // config.setAllowCredentials(true); // you USUALLY want this
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("HEAD");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("PATCH");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 }

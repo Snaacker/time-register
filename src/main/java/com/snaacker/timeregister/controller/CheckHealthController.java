@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 public class CheckHealthController {
-  @AllowAnonymous
-  @GetMapping("/health_check")
-  public ResponseEntity<String> healthCheck() {
-    return new ResponseEntity<>("OK", HttpStatus.OK);
-  }
+    @AllowAnonymous
+    @GetMapping("/health_check")
+    public ResponseEntity<String> healthCheck() {
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 }

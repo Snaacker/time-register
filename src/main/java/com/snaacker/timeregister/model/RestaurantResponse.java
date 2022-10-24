@@ -3,10 +3,10 @@ package com.snaacker.timeregister.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.snaacker.timeregister.persistent.Restaurant;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class RestaurantResponse {
     @JsonProperty("name")
     private String name;
+
     @JsonProperty("address")
     private String address;
 
@@ -26,6 +27,7 @@ public class RestaurantResponse {
 
     @JsonProperty("phone_number")
     private String phoneNumber;
+
     public RestaurantResponse(Restaurant restaurant) {
         this.address = restaurant.getAddress();
         this.name = restaurant.getName();

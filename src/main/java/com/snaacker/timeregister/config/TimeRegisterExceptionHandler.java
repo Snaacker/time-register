@@ -14,31 +14,31 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class TimeRegisterExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(value = {TimeRegisterObjectNotFoundException.class})
-  protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
-    String bodyOfResponse = "Object not found\n" + ex.getMessage();
-    return handleExceptionInternal(
-        ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-  }
+    @ExceptionHandler(value = {TimeRegisterObjectNotFoundException.class})
+    protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "Object not found\n" + ex.getMessage();
+        return handleExceptionInternal(
+                ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 
-  @ExceptionHandler(value = {TimeRegisterBadRequestException.class})
-  protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
-    String bodyOfResponse = "Bad request\n" + ex.getMessage();
-    return handleExceptionInternal(
-        ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-  }
+    @ExceptionHandler(value = {TimeRegisterBadRequestException.class})
+    protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "Bad request\n" + ex.getMessage();
+        return handleExceptionInternal(
+                ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 
-  @ExceptionHandler(value = {TimeRegisterUnauthorizedException.class})
-  protected ResponseEntity<Object> handleUnAuthorized(RuntimeException ex, WebRequest request) {
-    String bodyOfResponse = "Bad request\n" + ex.getMessage();
-    return handleExceptionInternal(
-        ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
-  }
+    @ExceptionHandler(value = {TimeRegisterUnauthorizedException.class})
+    protected ResponseEntity<Object> handleUnAuthorized(RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "Bad request\n" + ex.getMessage();
+        return handleExceptionInternal(
+                ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
 
-  @ExceptionHandler(value = {TimeRegisterUserNotAllowException.class})
-  protected ResponseEntity<Object> handleUserNotAllow(RuntimeException ex, WebRequest request) {
-    String bodyOfResponse = "User not allow\n" + ex.getMessage();
-    return handleExceptionInternal(
-        ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
-  }
+    @ExceptionHandler(value = {TimeRegisterUserNotAllowException.class})
+    protected ResponseEntity<Object> handleUserNotAllow(RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "User not allow\n" + ex.getMessage();
+        return handleExceptionInternal(
+                ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
 }

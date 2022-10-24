@@ -17,5 +17,4 @@ public enum TimesheetType {
     public String getTimesheetType() {
         return value;
     }
-
 }

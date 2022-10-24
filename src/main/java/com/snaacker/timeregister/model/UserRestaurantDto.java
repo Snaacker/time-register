@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,7 +15,7 @@ public class UserRestaurantDto {
     private RestaurantRequest restaurantRequest;
     private boolean isManager;
 
-    public UserRestaurantDto(UserRestaurant userRestaurant){
+    public UserRestaurantDto(UserRestaurant userRestaurant) {
         this.isManager = userRestaurant.isRestaurantManager();
     }
 }

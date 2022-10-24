@@ -5,96 +5,114 @@ import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterException;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
 import com.snaacker.timeregister.model.*;
-import com.snaacker.timeregister.persistent.UserRestaurant;
 import com.snaacker.timeregister.service.TimesheetRecordService;
 import com.snaacker.timeregister.service.UserService;
 import com.snaacker.timeregister.utils.Constants;
-import com.snaacker.timeregister.utils.DtoTransformation;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-  private UserService userService;
-  private TimesheetRecordService timesheetRecordService;
+    private UserService userService;
+    private TimesheetRecordService timesheetRecordService;
 
-  @Autowired
-  public UserController(final UserService userService, final TimesheetRecordService timesheetRecordService) {
-    this.userService = userService;
-    this.timesheetRecordService = timesheetRecordService;
-  }
+    @Autowired
+    public UserController(
+            final UserService userService, final TimesheetRecordService timesheetRecordService) {
+        this.userService = userService;
+        this.timesheetRecordService = timesheetRecordService;
+    }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<UserResponse> getUserById(@PathVariable Long id)
-      throws TimeRegisterObjectNotFoundException {
-    return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id)
+            throws TimeRegisterObjectNotFoundException {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
 
-  @AllowAdmin
-  @GetMapping("")
-  public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getListUser(
-      @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
-          int startPage,
-      @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "") int pageSize) {
-    return new ResponseEntity<>(userService.getListUser(startPage, pageSize), HttpStatus.OK);
-  }
+    @AllowAdmin
+    @GetMapping("")
+    public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getListUser(
+            @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
+                    int startPage,
+            @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "")
+                    int pageSize) {
+        return new ResponseEntity<>(userService.getListUser(startPage, pageSize), HttpStatus.OK);
+    }
 
-  @AllowAdmin
-  @PutMapping("")
-  public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user)
-      throws TimeRegisterBadRequestException {
-    return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
-  }
+    @AllowAdmin
+    @PutMapping("")
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user)
+            throws TimeRegisterBadRequestException {
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
 
-  @AllowAdmin
-  @PostMapping("/{id}")
-  public ResponseEntity<UserResponse> editUser(@PathVariable long id, @RequestBody UserRequest user)
-      throws TimeRegisterBadRequestException {
-    return new ResponseEntity<>(userService.editUser(id, user), HttpStatus.OK);
-  }
+    @AllowAdmin
+    @PostMapping("/{id}")
+    public ResponseEntity<UserResponse> editUser(
+            @PathVariable long id, @RequestBody UserRequest user)
+            throws TimeRegisterBadRequestException {
+        return new ResponseEntity<>(userService.editUser(id, user), HttpStatus.OK);
+    }
 
-  @AllowAdmin
-  @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteUser(@PathVariable Long id)
-      throws TimeRegisterBadRequestException {
-    return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
-  }
+    @AllowAdmin
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id)
+            throws TimeRegisterBadRequestException {
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    }
 
-  @AllowAdmin
-  // TODO: return list registed time of user
-  @GetMapping("/{id}/registration")
-  public ResponseEntity<TimeRegisterGenericResponse<TimeRecordResponse>> getAllRegisteredTimeByUser(
-      @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
-          int startPage,
-      @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "") int pageSize,
-      @PathVariable long id,
-      @RequestParam Date fromDate,
-      @RequestParam Date toDate)
-      throws TimeRegisterObjectNotFoundException {
+    @AllowAdmin
+    // TODO: return list registed time of user
+    @GetMapping("/{id}/registration")
+    public ResponseEntity<TimeRegisterGenericResponse<TimeRecordResponse>>
+            getAllRegisteredTimeByUser(
+                    @RequestParam(
+                                    name = "startPage",
+                                    defaultValue = Constants.DEFAULT_START_PAGE + "")
+                            int startPage,
+                    @RequestParam(
+                                    name = "pageSize",
+                                    defaultValue = Constants.DEFAULT_PAGE_SIZE + "")
+                            int pageSize,
+                    @PathVariable long id,
+                    @RequestParam Date fromDate,
+                    @RequestParam Date toDate)
+                    throws TimeRegisterObjectNotFoundException {
 
-    return new ResponseEntity<>(
-        timesheetRecordService.getTimeRecordByUserId(id, fromDate, toDate, startPage, pageSize),
-        HttpStatus.OK);
-  }
+        return new ResponseEntity<>(
+                timesheetRecordService.getTimeRecordByUserId(
+                        id, fromDate, toDate, startPage, pageSize),
+                HttpStatus.OK);
+    }
 
-  @PutMapping("/{id}/registration")
-  public ResponseEntity<UserTimeRecordResponse> addTimeRecord(
-      @PathVariable Long id, @RequestBody TimeRecordRequest timeRecordRequest)
-      throws TimeRegisterException {
-    return new ResponseEntity<>(
-        userService.addTimeRecord(id, timeRecordRequest), HttpStatus.CREATED);
-  }
+    @PutMapping("/{id}/registration")
+    public ResponseEntity<UserMultipleTimeRecordResponse> addTimeRecord(
+            @PathVariable Long id, @RequestBody TimeRecordRequest timeRecordRequest)
+            throws TimeRegisterException {
+        return new ResponseEntity<>(
+                userService.addTimeRecord(id, timeRecordRequest), HttpStatus.CREATED);
+    }
 
-  @PostMapping("/{id}/registration/{record_id}")
-  public ResponseEntity<UserTimeRecordResponse> editTimeRecord(
-      @PathVariable Long id, @PathVariable Long record_id) {
-    return null;
-  }
+    @PostMapping("/{user_id}/time_record/{record_id}")
+    public ResponseEntity<UserSingleTimeRecordResponse> editTimeRecord(
+            @PathVariable Long user_id,
+            @PathVariable Long record_id,
+            @RequestBody TimeRecordRequest timeRecord) {
+        return new ResponseEntity<>(
+                userService.editTimeRecord(user_id, record_id, timeRecord), HttpStatus.ACCEPTED);
+    }
+
+    @AllowAdmin
+    @PostMapping("/{user_id}/confirmation")
+    public ResponseEntity<String> approveTimeSheet(
+            @PathVariable Long user_id, @RequestBody List<Long> listTimeSheetId) {
+        userService.approvedTimesheet(user_id, listTimeSheetId);
+        // TODO: return user response
+        return new ResponseEntity<>("Success approved", HttpStatus.OK);
+    }
 }
