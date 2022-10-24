@@ -1,8 +1,8 @@
 package com.snaacker.timeregister.service;
 
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
-import com.snaacker.timeregister.model.TimeRecordResponse;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.TimeRecordResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.TimesheetRecord;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;

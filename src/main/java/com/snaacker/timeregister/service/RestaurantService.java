@@ -3,6 +3,9 @@ package com.snaacker.timeregister.service;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
 import com.snaacker.timeregister.model.*;
+import com.snaacker.timeregister.model.request.RestaurantRequest;
+import com.snaacker.timeregister.model.response.RestaurantResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.RestaurantConfigureData;
 import com.snaacker.timeregister.persistent.User;
@@ -65,13 +68,13 @@ public class RestaurantService {
             restaurant.setRestaurantConfigureData(
                     restaurantRequest.getRestaurantDataDto().stream()
                             .map(RestaurantConfigureData::new)
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toSet()));
         }
         if (null != restaurantRequest.getUserRestaurantDto()) {
             restaurant.setUserRestaurant(
                     restaurantRequest.getUserRestaurantDto().stream()
                             .map(this::userRestaurantDto2userRestaurant)
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toSet()));
         }
 
         return new RestaurantResponse(restaurantRepository.save(restaurant));

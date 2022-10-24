@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.snaacker.timeregister.FixtureTest;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
-import com.snaacker.timeregister.model.UserResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.persistent.Role;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;

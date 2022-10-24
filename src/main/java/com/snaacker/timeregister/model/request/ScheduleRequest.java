@@ -1,4 +1,4 @@
-package com.snaacker.timeregister.model;
+package com.snaacker.timeregister.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;

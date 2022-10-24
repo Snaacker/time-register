@@ -1,9 +1,9 @@
 package com.snaacker.timeregister.service;
 
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
-import com.snaacker.timeregister.model.ScheduleRequest;
-import com.snaacker.timeregister.model.ScheduleResponse;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.request.ScheduleRequest;
+import com.snaacker.timeregister.model.response.ScheduleResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.Schedule;
 import com.snaacker.timeregister.repository.RestaurantRepository;

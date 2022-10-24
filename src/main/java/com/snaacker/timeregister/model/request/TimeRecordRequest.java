@@ -1,8 +1,10 @@
-package com.snaacker.timeregister.model;
+package com.snaacker.timeregister.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import com.snaacker.timeregister.persistent.TimesheetType;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -17,10 +19,13 @@ import lombok.Setter;
 @JsonIgnoreProperties(
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
-public class AuthenticationRequest {
-    @JsonProperty("email")
-    String email;
+public class TimeRecordRequest implements Serializable {
+    @JsonProperty("from_time")
+    private Date fromTime;
 
-    @JsonProperty("password")
-    String password;
+    @JsonProperty("to_time")
+    private Date toTime;
+
+    @JsonProperty("type")
+    private TimesheetType type;
 }

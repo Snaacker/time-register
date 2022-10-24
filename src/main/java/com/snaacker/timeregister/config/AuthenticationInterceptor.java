@@ -4,7 +4,7 @@ import com.snaacker.timeregister.annotation.AllowAdmin;
 import com.snaacker.timeregister.annotation.AllowAnonymous;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterUserNotAllowException;
-import com.snaacker.timeregister.model.UserResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.persistent.Role;
 import com.snaacker.timeregister.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;

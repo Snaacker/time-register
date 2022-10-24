@@ -1,7 +1,11 @@
 package com.snaacker.timeregister.controller;
 
 import com.snaacker.timeregister.annotation.AllowAdmin;
-import com.snaacker.timeregister.model.*;
+import com.snaacker.timeregister.model.request.RestaurantRequest;
+import com.snaacker.timeregister.model.request.ScheduleRequest;
+import com.snaacker.timeregister.model.response.RestaurantResponse;
+import com.snaacker.timeregister.model.response.ScheduleResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.service.RestaurantService;
 import com.snaacker.timeregister.service.ScheduleService;
 import com.snaacker.timeregister.utils.Constants;

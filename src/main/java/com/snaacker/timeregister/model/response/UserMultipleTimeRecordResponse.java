@@ -1,7 +1,10 @@
-package com.snaacker.timeregister.model;
+package com.snaacker.timeregister.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.snaacker.timeregister.model.response.TimeRecordResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

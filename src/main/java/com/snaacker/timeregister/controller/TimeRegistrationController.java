@@ -1,8 +1,8 @@
 package com.snaacker.timeregister.controller;
 
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
-import com.snaacker.timeregister.model.TimeRecordResponse;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.TimeRecordResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.service.TimesheetRecordService;
 import com.snaacker.timeregister.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;

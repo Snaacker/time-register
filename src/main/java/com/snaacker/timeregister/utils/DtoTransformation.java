@@ -1,6 +1,12 @@
 package com.snaacker.timeregister.utils;
 
 import com.snaacker.timeregister.model.*;
+import com.snaacker.timeregister.model.request.RestaurantRequest;
+import com.snaacker.timeregister.model.request.UserRequest;
+import com.snaacker.timeregister.model.response.TimeRecordResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.UserMultipleTimeRecordResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.persistent.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +14,6 @@ import java.util.stream.Collectors;
 public class DtoTransformation {
     // TODO: these dto transform methods are not needed
     public static UserRequest model2Dto(User user) {
-
         UserRequest userRequest = new UserRequest();
         userRequest.setAddress(user.getAddress());
         userRequest.setAccountId(user.getAccountId());
@@ -19,7 +24,6 @@ public class DtoTransformation {
     }
 
     public static UserResponse user2UserResponse(User user) {
-
         UserResponse userResponse = new UserResponse();
         userResponse.setAddress(user.getAddress());
         userResponse.setAccountId(user.getAccountId());
@@ -96,13 +100,13 @@ public class DtoTransformation {
             restaurant.setUserRestaurant(
                     restaurantRequest.getUserRestaurantDto().stream()
                             .map(DtoTransformation::UserRestaurantDto2UserRestaurant)
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toSet()));
         }
         if (null != restaurantRequest.getRestaurantDataDto()) {
             restaurant.setRestaurantConfigureData(
                     restaurantRequest.getRestaurantDataDto().stream()
                             .map(DtoTransformation::restaurantDataDto2RestaurantConfigureData)
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toSet()));
         }
         return restaurant;
     }

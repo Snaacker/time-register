@@ -1,8 +1,10 @@
 package com.snaacker.timeregister.persistent;
 
-import com.snaacker.timeregister.model.RestaurantRequest;
+import com.snaacker.timeregister.model.request.RestaurantRequest;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,24 +33,24 @@ public class Restaurant extends BaseObject {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private List<UserRestaurant> userRestaurant;
+    private Set<UserRestaurant> userRestaurant = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private List<RestaurantConfigureData> restaurantConfigureData;
+    private Set<RestaurantConfigureData> restaurantConfigureData;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private List<Schedule> schedule;
+    private Set<Schedule> schedule;
 
     public Restaurant(RestaurantRequest restaurantRequest) {
         this.name = restaurantRequest.getName();
         this.address = restaurantRequest.getAddress();
-        this.createdDate = new Date();
-        this.updatedDate = new Date();
+        setCreatedDate();
+        setUpdatedDate();
     }
 
     public Restaurant() {
         super();
-        this.createdDate = new Date();
-        this.updatedDate = new Date();
+        setCreatedDate();
+        setUpdatedDate();
     }
 }

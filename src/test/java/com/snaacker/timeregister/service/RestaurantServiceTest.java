@@ -6,8 +6,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.snaacker.timeregister.FixtureTest;
-import com.snaacker.timeregister.model.RestaurantResponse;
-import com.snaacker.timeregister.model.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.RestaurantResponse;
+import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.repository.RestaurantRepository;
 import java.util.ArrayList;

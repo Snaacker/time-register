@@ -1,35 +1,35 @@
-package com.snaacker.timeregister.model;
+package com.snaacker.timeregister.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.snaacker.timeregister.persistent.Restaurant;
+import com.snaacker.timeregister.model.RestaurantDataDto;
+import com.snaacker.timeregister.model.UserRestaurantDto;
+import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
-public class RestaurantResponse {
+public class RestaurantRequest {
+
     @JsonProperty("name")
     private String name;
 
     @JsonProperty("address")
     private String address;
 
-    @JsonProperty("email")
-    private String email;
+    @JsonProperty("user_restaurant")
+    private List<UserRestaurantDto> userRestaurantDto;
 
-    @JsonProperty("phone_number")
-    private String phoneNumber;
-
-    public RestaurantResponse(Restaurant restaurant) {
-        this.address = restaurant.getAddress();
-        this.name = restaurant.getName();
-    }
+    @JsonProperty("restaurant_data")
+    private List<RestaurantDataDto> restaurantDataDto;
 }

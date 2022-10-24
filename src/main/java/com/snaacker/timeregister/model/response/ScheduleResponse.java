@@ -1,4 +1,4 @@
-package com.snaacker.timeregister.model;
+package com.snaacker.timeregister.model.response;
 
 import com.snaacker.timeregister.persistent.Schedule;
 import java.util.Date;

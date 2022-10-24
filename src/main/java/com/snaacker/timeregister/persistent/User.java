@@ -1,9 +1,11 @@
 package com.snaacker.timeregister.persistent;
 
-import com.snaacker.timeregister.model.UserRequest;
+import com.snaacker.timeregister.model.request.UserRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,10 +57,10 @@ public class User extends BaseObject {
     private String managerNote;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<TimesheetRecord> timesheetRecord;
+    private Set<TimesheetRecord> timesheetRecord;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<UserRestaurant> userRestaurants;
+    private Set<UserRestaurant> userRestaurants;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Set<Message> message;
@@ -86,8 +88,8 @@ public class User extends BaseObject {
         this.isAdmin = isAdmin;
         this.managerNote = managerNote;
         this.roleName = roleName;
-        this.createdDate = new Date();
-        this.updatedDate = new Date();
+        setCreatedDate();
+        setUpdatedDate();
     }
 
     public User(UserRequest userRequest) {
@@ -103,13 +105,13 @@ public class User extends BaseObject {
         this.maximumWorkingHours = userRequest.getMaximumWorkingHours();
         this.isAdmin = userRequest.isAdmin();
         this.managerNote = userRequest.getManagerNote();
-        this.createdDate = new Date();
-        this.updatedDate = new Date();
+        setCreatedDate();
+        setUpdatedDate();
     }
 
     public User() {
         super();
-        this.createdDate = new Date();
-        this.updatedDate = new Date();
+        setCreatedDate();
+        setUpdatedDate();
     }
 }

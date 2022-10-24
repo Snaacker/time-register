@@ -1,6 +1,6 @@
 package com.snaacker.timeregister.config;
 
-import com.snaacker.timeregister.model.UserResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.persistent.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
