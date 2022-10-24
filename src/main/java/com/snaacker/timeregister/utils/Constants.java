@@ -3,10 +3,10 @@ package com.snaacker.timeregister.utils;
 public class Constants {
 
     // Role type
-    public static final String ADMIN = "Admin";
-    public static final String MANAGER = "Manager";
-    public static final String EMPLOYEE = "Employee";
-    public static final String ANONYMOUS = "Anonymous";
+    public static final String ADMIN = "ADMIN";
+    public static final String MANAGER = "MANAGER";
+    public static final String EMPLOYEE = "EMPLOYEE";
+    public static final String ANONYMOUS = "ANONYMOUS";
 
     // DEFAULT VALUES
     public static final int DEFAULT_START_PAGE = 0;
