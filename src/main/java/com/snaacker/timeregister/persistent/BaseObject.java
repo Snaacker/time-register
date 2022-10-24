@@ -25,11 +25,11 @@ public class BaseObject {
     @Column(name = "description")
     protected String description;
 
-    protected void setCreatedDate(){
+    protected void setCreatedDate() {
         this.createdDate = new Date();
     }
 
-    protected void setUpdatedDate(){
+    protected void setUpdatedDate() {
         this.updatedDate = new Date();
     }
 }

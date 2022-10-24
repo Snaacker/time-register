@@ -75,6 +75,5 @@ public class TimeRegisterInitializingData {
         setManagerRestaurant.add(managerRestaurant);
         manager.setUserRestaurants(setManagerRestaurant);
         userRepository.save(manager);
-
     }
 }

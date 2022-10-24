@@ -121,4 +121,12 @@ public class UserController {
         // TODO: return user response
         return new ResponseEntity<>("Success approved", HttpStatus.OK);
     }
+
+    @AllowAdmin
+    @PostMapping("/{user_id}/restaurant/{restaurant_id}")
+    public ResponseEntity<UserResponse> assignRestaurant(
+            @PathVariable Long user_id, @PathVariable Long restaurant_id) {
+        return new ResponseEntity<>(
+                userService.assignRestaurant(user_id, restaurant_id), HttpStatus.OK);
+    }
 }

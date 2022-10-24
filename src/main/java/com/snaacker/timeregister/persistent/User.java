@@ -1,11 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.request.UserRequest;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

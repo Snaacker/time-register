@@ -10,23 +10,32 @@ import com.snaacker.timeregister.model.response.UserMultipleTimeRecordResponse;
 import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.model.response.UserSingleTimeRecordResponse;
 import com.snaacker.timeregister.persistent.Message;
+import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.TimesheetRecord;
 import com.snaacker.timeregister.persistent.User;
+import com.snaacker.timeregister.persistent.UserRestaurant;
 import com.snaacker.timeregister.repository.MessageRepository;
+import com.snaacker.timeregister.repository.RestaurantRepository;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;
 import com.snaacker.timeregister.repository.UserRepository;
+import com.snaacker.timeregister.utils.Constants;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import com.snaacker.timeregister.utils.Utilities;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,8 +43,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired private UserRepository userRepository;
+    @Autowired private RestaurantRepository restaurantRepository;
     @Autowired private TimesheetRecordRepository timesheetRecordRepository;
 
     @Autowired private MessageRepository messageRepository;
@@ -58,6 +69,21 @@ public class UserService {
 
     public UserResponse createUser(UserRequest userRequest) throws TimeRegisterBadRequestException {
         User user = DtoTransformation.dto2User(userRequest);
+        if (null != userRequest.getRestaurantName()) {
+            UserRestaurant userRestaurant = new UserRestaurant();
+            userRestaurant.setUsers(user);
+            Restaurant returnRestaurant =
+                    restaurantRepository.findByName(userRequest.getRestaurantName());
+            if (null == returnRestaurant) {
+                throw new TimeRegisterBadRequestException("Restaurant does not exist");
+            }
+            userRestaurant.setRestaurant(returnRestaurant);
+            if (user.getRoleName().getRoleValue().equals(Constants.MANAGER)) {
+                userRestaurant.setRestaurantManager(true);
+            }
+        } else {
+            logger.warn("You need to assign user to existed restaurant later");
+        }
         try {
             user.setPassword(Utilities.encrypt(userRequest.getPassword()));
         } catch (NoSuchPaddingException
@@ -251,5 +277,19 @@ public class UserService {
 
         TimesheetRecord returnTimesheet = timesheetRecordRepository.save(requestChangeTimesheet);
         return new UserSingleTimeRecordResponse(returnUser, returnTimesheet);
+    }
+
+    public UserResponse assignRestaurant(Long user_id, Long restaurant_id) {
+        User user = userRepository.findById(user_id).get();
+        Restaurant restaurant = restaurantRepository.findById(restaurant_id).get();
+        UserRestaurant userRestaurant = new UserRestaurant();
+        userRestaurant.setUsers(user);
+        userRestaurant.setRestaurant(restaurant);
+        userRestaurant.setRestaurantManager(
+                user.getRoleName().getRoleValue().equals(Constants.MANAGER));
+        Set<UserRestaurant> setUserRestaurant = new HashSet<>(Arrays.asList(userRestaurant));
+        user.setUserRestaurants(setUserRestaurant);
+        User returnUser = userRepository.save(user);
+        return new UserResponse(returnUser);
     }
 }

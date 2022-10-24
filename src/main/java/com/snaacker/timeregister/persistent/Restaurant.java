@@ -1,9 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.request.RestaurantRequest;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

@@ -54,4 +54,7 @@ public class UserRequest {
 
     @JsonProperty("manager_note")
     private String managerNote;
+
+    @JsonProperty("restaurant_name")
+    private String restaurantName;
 }
