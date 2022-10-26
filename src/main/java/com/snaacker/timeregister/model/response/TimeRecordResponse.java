@@ -20,6 +20,8 @@ import lombok.Setter;
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
 public class TimeRecordResponse {
+    @JsonProperty("timesheet_id")
+    private long id;
     @JsonProperty("from_time")
     private Date fromTime;
 
@@ -33,6 +35,7 @@ public class TimeRecordResponse {
     private boolean isApproved;
 
     public TimeRecordResponse(TimesheetRecord timesheetRecord) {
+        this.id = timesheetRecord.getId();
         this.fromTime = timesheetRecord.getFromTime();
         this.toTime = timesheetRecord.getToTime();
         this.timesheetType = timesheetRecord.getTimesheetType();

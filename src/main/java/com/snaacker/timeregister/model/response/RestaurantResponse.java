@@ -16,6 +16,10 @@ import lombok.Setter;
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
 public class RestaurantResponse {
+
+    @JsonProperty("restaurant_id")
+    private long id;
+
     @JsonProperty("name")
     private String name;
 
@@ -29,6 +33,7 @@ public class RestaurantResponse {
     private String phoneNumber;
 
     public RestaurantResponse(Restaurant restaurant) {
+        this.id = restaurant.getId();
         this.address = restaurant.getAddress();
         this.name = restaurant.getName();
     }

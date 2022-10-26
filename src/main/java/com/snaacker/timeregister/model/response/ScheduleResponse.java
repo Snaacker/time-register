@@ -12,11 +12,13 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class ScheduleResponse {
+    private long id;
     private Date scheduleDate;
     private Date fromTime;
     private Date toTime;
 
     public ScheduleResponse(Schedule schedule) {
+        this.id = schedule.getId();
         this.scheduleDate = schedule.getScheduleDate();
         this.fromTime = schedule.getFromTime();
         this.toTime = schedule.getToTime();

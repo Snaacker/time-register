@@ -46,6 +46,7 @@ public class UserResponse {
     private Role roleName;
 
     public UserResponse(User user) {
+        this.id = user.getId();
         this.accountId = user.getAccountId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
