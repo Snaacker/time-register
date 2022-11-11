@@ -4,7 +4,7 @@ if [ ! "$(docker ps -q -f name=db)" ]; then
     # run your container
     docker run -d --name db -e POSTGRES_USER=admin \
       -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=timeregister \
-      -p 5432:5432 --net=host postgres:13.1-alpine
+      -p 5432:5432 postgres:13.1-alpine
 fi
 
 export SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/timeregister"
