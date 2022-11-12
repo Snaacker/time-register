@@ -37,4 +37,11 @@ public class RestaurantResponse {
         this.address = restaurant.getAddress();
         this.name = restaurant.getName();
     }
+
+    public RestaurantResponse(String name, String address, String email, String phoneNumber) {
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }
