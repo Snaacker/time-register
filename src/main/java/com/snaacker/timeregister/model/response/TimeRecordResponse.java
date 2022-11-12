@@ -22,6 +22,7 @@ import lombok.Setter;
 public class TimeRecordResponse {
     @JsonProperty("timesheet_id")
     private long id;
+
     @JsonProperty("from_time")
     private Date fromTime;
 
