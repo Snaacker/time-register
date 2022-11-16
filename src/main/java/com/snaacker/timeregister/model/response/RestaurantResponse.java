@@ -32,10 +32,17 @@ public class RestaurantResponse {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("manager")
+    private String manager;
+
     public RestaurantResponse(Restaurant restaurant) {
         this.id = restaurant.getId();
         this.address = restaurant.getAddress();
         this.name = restaurant.getName();
+        this.email = restaurant.getEmail();
+        if (null != restaurant.getManager()) {
+            this.manager = restaurant.getManager().getAccountId();
+        }
     }
 
     public RestaurantResponse(String name, String address, String email, String phoneNumber) {

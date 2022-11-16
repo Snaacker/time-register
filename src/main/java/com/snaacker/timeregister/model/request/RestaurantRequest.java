@@ -27,9 +27,18 @@ public class RestaurantRequest {
     @JsonProperty("address")
     private String address;
 
+    @JsonProperty("email")
+    private String email;
+
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+
     @JsonProperty("user_restaurant")
     private List<UserRestaurantDto> userRestaurantDto;
 
     @JsonProperty("restaurant_data")
     private List<RestaurantDataDto> restaurantDataDto;
+
+    @JsonProperty("manager")
+    private String manager;
 }

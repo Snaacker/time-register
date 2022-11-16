@@ -11,10 +11,10 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @Entity
 @Getter
 @Setter
-@Table(name = "restaurant_configure_data")
+@Table(name = "restaurant_configuration_data")
 @NoArgsConstructor
 @RestResource(exported = false)
-public class RestaurantConfigureData extends BaseObject {
+public class RestaurantConfigurationData extends BaseObject {
     @Column(name = "timesheet_closing_date", unique = true)
     private Date timesheetClosingDate;
 
@@ -27,7 +27,7 @@ public class RestaurantConfigureData extends BaseObject {
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
-    public RestaurantConfigureData(RestaurantDataDto restaurantDataDto) {
+    public RestaurantConfigurationData(RestaurantDataDto restaurantDataDto) {
         this.timesheetClosingDate = restaurantDataDto.getTimesheetClosingDate();
     }
 }

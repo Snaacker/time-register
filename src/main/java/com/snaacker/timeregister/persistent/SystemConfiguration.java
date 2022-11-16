@@ -1,8 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "message")
-public class Message extends BaseObject {
-    String title;
-    String content;
+@Table(name = "system_configuration")
+public class SystemConfiguration extends BaseObject {
+    @Column(name = "name", nullable = false)
+    ConfigurationName name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User users;
+    @Column(name = "value")
+    String value;
 }

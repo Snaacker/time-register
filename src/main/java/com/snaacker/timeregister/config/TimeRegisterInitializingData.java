@@ -31,6 +31,7 @@ public class TimeRegisterInitializingData {
         admin.setUsername("admin");
         admin.setFirstName("admin");
         admin.setLastName("admin");
+        admin.setAccountId("admin");
         admin.setEmail("me@snaacker.com");
         admin.setAdmin(true);
         admin.setRoleName(Role.ADMIN);
@@ -44,12 +45,14 @@ public class TimeRegisterInitializingData {
         restaurantRepository.save(restaurantTokyoSushi);
 
         User employee = new User();
+        employee.setAccountId("duyh");
         employee.setUsername("hoang_a_bi");
         employee.setRoleName(Role.EMPLOYEE);
         employee.setFirstName("Hoang");
         employee.setLastName("Duy");
         employee.setEmail("duy@magdeburg.de");
         employee.setPassword(password);
+        employee.setMaximumWorkingHours(20);
 
         UserRestaurant employeeRestaurant = new UserRestaurant();
         employeeRestaurant.setUsers(employee);
@@ -60,6 +63,7 @@ public class TimeRegisterInitializingData {
         userRepository.save(employee);
 
         User manager = new User();
+        manager.setAccountId("huytq");
         manager.setUsername("snaacker");
         manager.setRoleName(Role.MANAGER);
         manager.setFirstName("Tran");

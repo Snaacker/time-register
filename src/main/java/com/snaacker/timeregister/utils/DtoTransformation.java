@@ -33,6 +33,8 @@ public class DtoTransformation {
         userResponse.setRoleName(user.getRoleName());
         userResponse.setId(user.getId());
         userResponse.setUsername(user.getUsername());
+        userResponse.setMaximumWorkingHours(user.getMaximumWorkingHours());
+        userResponse.setEmail(user.getEmail());
         return userResponse;
     }
 
@@ -103,7 +105,7 @@ public class DtoTransformation {
                             .collect(Collectors.toSet()));
         }
         if (null != restaurantRequest.getRestaurantDataDto()) {
-            restaurant.setRestaurantConfigureData(
+            restaurant.setRestaurantConfigurationData(
                     restaurantRequest.getRestaurantDataDto().stream()
                             .map(DtoTransformation::restaurantDataDto2RestaurantConfigureData)
                             .collect(Collectors.toSet()));
@@ -120,11 +122,11 @@ public class DtoTransformation {
         return userRestaurant;
     }
 
-    private static RestaurantConfigureData restaurantDataDto2RestaurantConfigureData(
+    private static RestaurantConfigurationData restaurantDataDto2RestaurantConfigureData(
             RestaurantDataDto restaurantDataDto) {
-        RestaurantConfigureData restaurantConfigureData = new RestaurantConfigureData();
-        restaurantConfigureData.setTimesheetClosingDate(
+        RestaurantConfigurationData restaurantConfigurationData = new RestaurantConfigurationData();
+        restaurantConfigurationData.setTimesheetClosingDate(
                 restaurantDataDto.getTimesheetClosingDate());
-        return restaurantConfigureData;
+        return restaurantConfigurationData;
     }
 }

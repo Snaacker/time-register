@@ -51,12 +51,6 @@ public class UserService {
 
     @Autowired private MessageRepository messageRepository;
 
-    //  @Value("${topic.name}")
-    //  private String topicName;
-
-    //  @Autowired
-    //  private KafkaTemplate kafkaTemplate;
-
     public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {
 
         Pageable pageable = PageRequest.of(startingPage, pageSize);
@@ -223,17 +217,21 @@ public class UserService {
         timesheetRecord.setUsers(user);
         timesheetRecordRepository.save(timesheetRecord);
 
-        Message message = new Message();
-        message.setContent("User " + user.getAccountId() + " has submitted a timesheet");
-        message.setUsers(user);
-        messageRepository.save(message);
+        user.getUserRestaurants()
+                .forEach(
+                        userRestaurant -> {
+                            long restaurantId = userRestaurant.getRestaurant().getId();
+                            User restaurantManager =
+                                    restaurantRepository.getById(restaurantId).getManager();
+                            Message message = new Message();
+                            message.setContent(
+                                    "User "
+                                            + user.getAccountId()
+                                            + " has submitted a timesheet record");
+                            message.setUsers(restaurantManager);
+                            messageRepository.save(message);
+                        });
 
-        // send message to
-        //    UUID key = UUID.randomUUID();
-        //    ProducerRecord<String, MessageDto> record = new ProducerRecord<>(topicName,
-        //            key.toString(),
-        //            new MessageDto("User " + user.getAccountId() + " has submitted a timesheet"));
-        //    kafkaTemplate.send(record);
         // TODO: return timesheet record of that week
         List<TimesheetRecord> listTimeSheetRecord =
                 timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(user.getId());
@@ -256,6 +254,11 @@ public class UserService {
                             timesheetRecordRepository.save(returnTimesheet);
                         });
 
+        Message message = new Message();
+        // TODO: introduce user display name
+        message.setContent("Your timesheet has been approved");
+        message.setUsers(returnUser);
+        messageRepository.save(message);
         UserMultipleTimeRecordResponse userMultipleTimeRecordResponse =
                 new UserMultipleTimeRecordResponse();
         userMultipleTimeRecordResponse.setUser(new UserResponse(returnUser));
@@ -274,7 +277,22 @@ public class UserService {
         requestChangeTimesheet.setToTime(timeRecord.getToTime());
         requestChangeTimesheet.setFromTime(timeRecord.getFromTime());
         requestChangeTimesheet.setTimesheetType(timeRecord.getType());
-
+        returnUser
+                .getUserRestaurants()
+                .forEach(
+                        userRestaurant -> {
+                            long restaurantId = userRestaurant.getRestaurant().getId();
+                            User restaurantManager =
+                                    restaurantRepository.getById(restaurantId).getManager();
+                            Message message = new Message();
+                            // TODO: introduce user display name
+                            message.setContent(
+                                    "User "
+                                            + returnUser.getAccountId()
+                                            + " has edit his/her timesheet");
+                            message.setUsers(restaurantManager);
+                            messageRepository.save(message);
+                        });
         TimesheetRecord returnTimesheet = timesheetRecordRepository.save(requestChangeTimesheet);
         return new UserSingleTimeRecordResponse(returnUser, returnTimesheet);
     }

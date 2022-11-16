@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +31,13 @@ public class Restaurant extends BaseObject {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @OneToOne private User manager;
+
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private Set<UserRestaurant> userRestaurant = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private Set<RestaurantConfigureData> restaurantConfigureData;
+    private Set<RestaurantConfigurationData> restaurantConfigurationData;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private Set<Schedule> schedule;

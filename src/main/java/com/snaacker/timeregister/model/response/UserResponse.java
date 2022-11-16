@@ -45,6 +45,12 @@ public class UserResponse {
     @JsonProperty("role_name")
     private Role roleName;
 
+    @JsonProperty("maximum_working_hours")
+    private int maximumWorkingHours;
+
+    @JsonProperty("email")
+    private String email;
+
     public UserResponse(User user) {
         this.id = user.getId();
         this.accountId = user.getAccountId();
@@ -53,5 +59,7 @@ public class UserResponse {
         this.phoneNumber = user.getPhoneNumber();
         this.address = user.getAddress();
         this.roleName = user.getRoleName();
+        this.email = user.getEmail();
+        this.maximumWorkingHours = user.getMaximumWorkingHours();
     }
 }
