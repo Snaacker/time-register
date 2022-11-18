@@ -60,6 +60,6 @@ public class UserResponse {
         this.address = user.getAddress();
         this.roleName = user.getRoleName();
         this.email = user.getEmail();
-        this.maximumWorkingHours = user.getMaximumWorkingHours();
+        this.maximumWorkingHours = user.getMaximumWorkingHoursPerWeek();
     }
 }

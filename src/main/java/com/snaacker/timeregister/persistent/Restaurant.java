@@ -1,6 +1,8 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.request.RestaurantRequest;
+import java.time.DayOfWeek;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -31,13 +33,25 @@ public class Restaurant extends BaseObject {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "status")
+    private boolean status;
+
+    @Column(name = "closing_date_type")
+    private ClosingDateType closingDateType;
+
+    @Column(name = "timesheet_closing_day_of_week")
+    private DayOfWeek timesheetClosingDayOfWeek;
+
+    @Column(name = "timesheet_closing_day_of_month")
+    private int timesheetClosingDayOfMonth;
+
+    @Column(name = "timesheet_closing_date")
+    private Date timesheetClosingDate;
+
     @OneToOne private User manager;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private Set<UserRestaurant> userRestaurant = new HashSet<>();
-
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private Set<RestaurantConfigurationData> restaurantConfigurationData;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private Set<Schedule> schedule;

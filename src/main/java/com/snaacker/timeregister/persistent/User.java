@@ -46,11 +46,14 @@ public class User extends BaseObject {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
-    @Column(name = "maximum_working_hours")
-    private int maximumWorkingHours;
+    @Column(name = "maximum_working_hours_per_week")
+    private int maximumWorkingHoursPerWeek;
 
     @Column(name = "manager_note")
     private String managerNote;
+
+    @Column(name = "contract_type")
+    private ContractType contractType;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Set<TimesheetRecord> timesheetRecord;
@@ -80,7 +83,7 @@ public class User extends BaseObject {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.roleName = roleName;
-        this.maximumWorkingHours = maximumWorkingHours;
+        this.maximumWorkingHoursPerWeek = maximumWorkingHoursPerWeek;
         this.isAdmin = isAdmin;
         this.managerNote = managerNote;
         this.roleName = roleName;
@@ -98,7 +101,7 @@ public class User extends BaseObject {
         this.phoneNumber = userRequest.getPhoneNumber();
         this.address = userRequest.getAddress();
         this.roleName = userRequest.getRoleName();
-        this.maximumWorkingHours = userRequest.getMaximumWorkingHours();
+        this.maximumWorkingHoursPerWeek = userRequest.getMaximumWorkingHoursPerWeek();
         this.isAdmin = userRequest.isAdmin();
         this.managerNote = userRequest.getManagerNote();
         setCreatedDate();

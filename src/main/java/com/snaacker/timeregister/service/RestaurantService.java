@@ -7,7 +7,6 @@ import com.snaacker.timeregister.model.request.RestaurantRequest;
 import com.snaacker.timeregister.model.response.RestaurantResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
-import com.snaacker.timeregister.persistent.RestaurantConfigurationData;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.persistent.UserRestaurant;
 import com.snaacker.timeregister.repository.RestaurantRepository;
@@ -63,12 +62,6 @@ public class RestaurantService {
         }
         if (null != restaurantRequest.getName()) {
             restaurant.setName(restaurantRequest.getName());
-        }
-        if (null != restaurantRequest.getRestaurantDataDto()) {
-            restaurant.setRestaurantConfigurationData(
-                    restaurantRequest.getRestaurantDataDto().stream()
-                            .map(RestaurantConfigurationData::new)
-                            .collect(Collectors.toSet()));
         }
         if (null != restaurantRequest.getUserRestaurantDto()) {
             restaurant.setUserRestaurant(

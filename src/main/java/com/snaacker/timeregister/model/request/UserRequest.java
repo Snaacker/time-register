@@ -49,8 +49,8 @@ public class UserRequest {
     @JsonProperty("is_admin")
     private boolean isAdmin;
 
-    @JsonProperty("maximum_working_hours")
-    private int maximumWorkingHours;
+    @JsonProperty("maximum_working_hours_per_week")
+    private int maximumWorkingHoursPerWeek;
 
     @JsonProperty("manager_note")
     private String managerNote;

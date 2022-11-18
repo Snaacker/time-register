@@ -37,9 +37,11 @@ public class ScheduleService {
             throw new TimeRegisterBadRequestException("Restaurant does not exist");
         }
         Schedule newSchedule = new Schedule();
-        newSchedule.setScheduleDate(scheduleRequest.getScheduleDate());
-        newSchedule.setFromTime(scheduleRequest.getFromTime());
-        newSchedule.setToTime(scheduleRequest.getToTime());
+        newSchedule.setScheduleType(scheduleRequest.getScheduleType());
+        newSchedule.setClosingHour(scheduleRequest.getClosingHour());
+        newSchedule.setOpeningHour(scheduleRequest.getOpeningHour());
+        newSchedule.setSpecialDate(scheduleRequest.getSpecialDate());
+        newSchedule.setSpecialDateName(scheduleRequest.getSpecialDateName());
         Schedule schedule = scheduleRepository.save(newSchedule);
         return new ScheduleResponse(schedule);
     }
@@ -54,14 +56,20 @@ public class ScheduleService {
         if (null == schedule) {
             throw new TimeRegisterBadRequestException("Schedule record does not exist");
         }
-        if (null != scheduleRequest.getScheduleDate()) {
-            schedule.setScheduleDate(scheduleRequest.getScheduleDate());
+        if (null != scheduleRequest.getScheduleType()) {
+            schedule.setScheduleType(scheduleRequest.getScheduleType());
         }
-        if (null != scheduleRequest.getToTime()) {
-            schedule.setToTime(scheduleRequest.getToTime());
+        if (0 != scheduleRequest.getOpeningHour()) {
+            schedule.setOpeningHour(scheduleRequest.getOpeningHour());
         }
-        if (null != scheduleRequest.getFromTime()) {
-            schedule.setFromTime(scheduleRequest.getFromTime());
+        if (0 != scheduleRequest.getClosingHour()) {
+            schedule.setClosingHour(scheduleRequest.getClosingHour());
+        }
+        if (null != scheduleRequest.getSpecialDate()) {
+            schedule.setSpecialDate(scheduleRequest.getSpecialDate());
+        }
+        if (null != scheduleRequest.getSpecialDateName()) {
+            schedule.setSpecialDateName(scheduleRequest.getSpecialDateName());
         }
         schedule.setUpdatedDate(new Date());
         return new ScheduleResponse(scheduleRepository.save(schedule));

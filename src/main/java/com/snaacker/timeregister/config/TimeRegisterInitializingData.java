@@ -52,7 +52,7 @@ public class TimeRegisterInitializingData {
         employee.setLastName("Duy");
         employee.setEmail("duy@magdeburg.de");
         employee.setPassword(password);
-        employee.setMaximumWorkingHours(20);
+        employee.setMaximumWorkingHoursPerWeek(20);
 
         UserRestaurant employeeRestaurant = new UserRestaurant();
         employeeRestaurant.setUsers(employee);

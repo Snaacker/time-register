@@ -2,7 +2,6 @@ package com.snaacker.timeregister.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.snaacker.timeregister.model.RestaurantDataDto;
 import com.snaacker.timeregister.model.UserRestaurantDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -35,9 +34,6 @@ public class RestaurantRequest {
 
     @JsonProperty("user_restaurant")
     private List<UserRestaurantDto> userRestaurantDto;
-
-    @JsonProperty("restaurant_data")
-    private List<RestaurantDataDto> restaurantDataDto;
 
     @JsonProperty("manager")
     private String manager;
