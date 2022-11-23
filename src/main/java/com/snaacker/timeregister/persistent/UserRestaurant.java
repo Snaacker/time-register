@@ -31,7 +31,5 @@ public class UserRestaurant extends BaseObject implements Serializable {
 
     public UserRestaurant(UserRestaurantDto userRestaurantDto) {
         this.isRestaurantManager = userRestaurantDto.isManager();
-        setCreatedDate();
-        setUpdatedDate();
     }
 }

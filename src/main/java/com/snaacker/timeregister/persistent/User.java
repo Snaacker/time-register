@@ -1,6 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.request.UserRequest;
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,14 +47,23 @@ public class User extends BaseObject {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    @Column(name = "is_first_login")
+    private boolean isFirstLogin;
+
     @Column(name = "maximum_working_hours_per_week")
     private int maximumWorkingHoursPerWeek;
+
+    @Column(name = "maximum_working_hours_per_month")
+    private int maximumWorkingHoursPerMonth;
 
     @Column(name = "manager_note")
     private String managerNote;
 
     @Column(name = "contract_type")
     private ContractType contractType;
+
+    @Column(name = "last_working_date")
+    private Date lastWorkingDate;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Set<TimesheetRecord> timesheetRecord;
@@ -83,12 +93,6 @@ public class User extends BaseObject {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.roleName = roleName;
-        this.maximumWorkingHoursPerWeek = maximumWorkingHoursPerWeek;
-        this.isAdmin = isAdmin;
-        this.managerNote = managerNote;
-        this.roleName = roleName;
-        setCreatedDate();
-        setUpdatedDate();
     }
 
     public User(UserRequest userRequest) {
@@ -104,13 +108,9 @@ public class User extends BaseObject {
         this.maximumWorkingHoursPerWeek = userRequest.getMaximumWorkingHoursPerWeek();
         this.isAdmin = userRequest.isAdmin();
         this.managerNote = userRequest.getManagerNote();
-        setCreatedDate();
-        setUpdatedDate();
     }
 
     public User() {
         super();
-        setCreatedDate();
-        setUpdatedDate();
     }
 }

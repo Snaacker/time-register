@@ -59,13 +59,9 @@ public class Restaurant extends BaseObject {
     public Restaurant(RestaurantRequest restaurantRequest) {
         this.name = restaurantRequest.getName();
         this.address = restaurantRequest.getAddress();
-        setCreatedDate();
-        setUpdatedDate();
     }
 
     public Restaurant() {
         super();
-        setCreatedDate();
-        setUpdatedDate();
     }
 }

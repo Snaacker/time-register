@@ -6,6 +6,7 @@ import com.snaacker.timeregister.model.*;
 import com.snaacker.timeregister.model.request.RestaurantRequest;
 import com.snaacker.timeregister.model.response.RestaurantResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.User;
 import com.snaacker.timeregister.persistent.UserRestaurant;
@@ -13,6 +14,7 @@ import com.snaacker.timeregister.repository.RestaurantRepository;
 import com.snaacker.timeregister.repository.UserRepository;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,5 +115,13 @@ public class RestaurantService {
             throw new TimeRegisterObjectNotFoundException("Can not find object" + e.getMessage());
         }
         return new RestaurantResponse(restaurant);
+    }
+
+    public TimeRegisterGenericResponse<UserResponse> getAllUserOfRestaurant(
+            long restaurantId, int startPage, int pageSize) {
+        Set<User> userSet = userRepository.getAllEmployeeOfRestaurant(restaurantId);
+        List<UserResponse> userResponses =
+                userSet.stream().map(UserResponse::new).collect(Collectors.toList());
+        return new TimeRegisterGenericResponse<>(userResponses, startPage, pageSize);
     }
 }

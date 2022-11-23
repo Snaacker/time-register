@@ -6,6 +6,7 @@ import com.snaacker.timeregister.model.request.ScheduleRequest;
 import com.snaacker.timeregister.model.response.RestaurantResponse;
 import com.snaacker.timeregister.model.response.ScheduleResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.service.RestaurantService;
 import com.snaacker.timeregister.service.ScheduleService;
 import com.snaacker.timeregister.utils.Constants;
@@ -83,5 +84,17 @@ public class RestaurantController {
             @RequestBody ScheduleRequest scheduleRequest) {
         return new ResponseEntity<>(
                 scheduleService.editSchedule(id, schedule_id, scheduleRequest), HttpStatus.OK);
+    }
+
+    @AllowAdmin
+    @GetMapping("/{id}/user")
+    public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getUserOfRestaurant(
+            @PathVariable Long id,
+            @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
+                    int startPage,
+            @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "")
+                    int pageSize) {
+        return new ResponseEntity<>(
+                restaurantService.getAllUserOfRestaurant(id, startPage, pageSize), HttpStatus.OK);
     }
 }

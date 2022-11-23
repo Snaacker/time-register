@@ -5,6 +5,9 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Setter
@@ -16,20 +19,16 @@ public class BaseObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
+    @CreatedBy private Long createdBy;
+
+    @CreatedDate
     @Column(name = "created_date")
     protected Date createdDate;
 
+    @LastModifiedDate
     @Column(name = "updated_date")
     protected Date updatedDate;
 
     @Column(name = "description")
     protected String description;
-
-    protected void setCreatedDate() {
-        this.createdDate = new Date();
-    }
-
-    protected void setUpdatedDate() {
-        this.updatedDate = new Date();
-    }
 }
