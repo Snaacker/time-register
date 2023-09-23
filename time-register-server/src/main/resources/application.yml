@@ -1,0 +1,21 @@
+spring:
+  sql.init.mode: always
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL_CUSTOMIZE}
+    username: ${USER_NAME}
+    password: ${USER_PASSWORD}
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  token-expires-after-days: 14

@@ -14,9 +14,5 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
-test {
-    useJUnitPlatform()
-}
-
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean

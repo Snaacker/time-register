@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  app:
+    image: 'time-register:latest'
+    container_name: app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/timeregister
+      - DATABASE_URL_CUSTOMIZE=jdbc:postgresql://db:5432/timeregister
+      - USER_NAME=admin
+      - USER_PASSWORD=admin
+      - JWT_SECRET_KEY=cbfZjNawhGCMkqA7yuQyMT7XmepLvW1T123avd
+    restart: on-failure
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=timeregister
+
+networks:
+  host:
+    name: host
+    external: true
