@@ -1,0 +1,93 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "com.diffplug.spotless" version "6.10.0"
+}
+
+group = 'com.snaacker'
+sourceCompatibility = '18'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+//    implementation 'org.apache.kafka:kafka-streams'
+//    implementation 'org.apache.kafka:spring-kafka'
+//    implementation 'org.springframework.kafka:spring-kafka'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'com.h2database:h2:2.1.212'
+}
+
+tasks.named('test') {
+    filter {
+        excludeTestsMatching "*EndpointTest"
+    }
+    useJUnitPlatform()
+}
+
+//task integrationTest(type: Test) {
+//    filter{
+//        includeTestsMatching "*EndpointTest"
+//    }
+//    useJUnitPlatform()
+//}
+
+//check.dependsOn integrationTest
+// Add these START
+bootJar {
+    archiveClassifier.set('boot')
+}
+
+
+spotless {
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        // apply a specific flavor of google-java-format
+        googleJavaFormat('1.15.0').aosp().reflowLongStrings()
+    }
+}
+
+jar {
+    archiveClassifier.set('')
+}
+
+task dockerContext(type: Copy, dependsOn: build) {
+    from "build/libs/time-register-server-boot.jar"
+    into "docker"
+}
+
+task buildDocker(type: Exec, dependsOn: dockerContext) {
+    workingDir "${projectDir}"
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', 'cd docker && docker build -t time-register:latest .'
+    } else {
+        commandLine 'bash', '-c', 'cd docker && docker build -t time-register:latest .'
+    }
+    doLast {
+        file("${projectDir}/docker/time-register-server-boot.jar").delete()
+    }
+}
