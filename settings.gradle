@@ -1,2 +1,4 @@
-rootProject.name = 'time-register-server'
+rootProject.name = 'time-register'
+
+include 'time-register-server', 'time-register-ui'
 
