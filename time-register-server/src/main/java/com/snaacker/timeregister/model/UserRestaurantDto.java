@@ -1,8 +1,8 @@
 package com.snaacker.timeregister.model;
 
+import com.snaacker.timeregister.model.request.EmployeeRequest;
 import com.snaacker.timeregister.model.request.RestaurantRequest;
-import com.snaacker.timeregister.model.request.UserRequest;
-import com.snaacker.timeregister.persistent.UserRestaurant;
+import com.snaacker.timeregister.persistent.EmployeeRestaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +13,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRestaurantDto {
-    private UserRequest userRequest;
+    private EmployeeRequest employeeRequest;
     private RestaurantRequest restaurantRequest;
     private boolean isManager;
 
-    public UserRestaurantDto(UserRestaurant userRestaurant) {
-        this.isManager = userRestaurant.isRestaurantManager();
+    public UserRestaurantDto(EmployeeRestaurant employeeRestaurant) {
+        this.isManager = employeeRestaurant.isRestaurantManager();
     }
 }

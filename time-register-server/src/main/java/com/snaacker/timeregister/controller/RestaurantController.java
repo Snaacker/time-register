@@ -3,17 +3,25 @@ package com.snaacker.timeregister.controller;
 import com.snaacker.timeregister.annotation.AllowAdmin;
 import com.snaacker.timeregister.model.request.RestaurantRequest;
 import com.snaacker.timeregister.model.request.ScheduleRequest;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
 import com.snaacker.timeregister.model.response.RestaurantResponse;
 import com.snaacker.timeregister.model.response.ScheduleResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
-import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.service.RestaurantService;
 import com.snaacker.timeregister.service.ScheduleService;
 import com.snaacker.timeregister.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")
@@ -88,7 +96,7 @@ public class RestaurantController {
 
     @AllowAdmin
     @GetMapping("/{id}/user")
-    public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getUserOfRestaurant(
+    public ResponseEntity<TimeRegisterGenericResponse<EmployeeResponse>> getUserOfRestaurant(
             @PathVariable Long id,
             @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
                     int startPage,

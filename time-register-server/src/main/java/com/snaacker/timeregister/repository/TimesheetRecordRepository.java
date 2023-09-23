@@ -1,7 +1,7 @@
 package com.snaacker.timeregister.repository;
 
+import com.snaacker.timeregister.persistent.Employee;
 import com.snaacker.timeregister.persistent.TimesheetRecord;
-import com.snaacker.timeregister.persistent.User;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,7 @@ public interface TimesheetRecordRepository extends JpaRepository<TimesheetRecord
             nativeQuery = true)
     List<TimesheetRecord> getTimeRecordOnSavedMonthOfUser(Long users_id);
 
-    List<TimesheetRecord> findByUsers(User user, Pageable pageable);
+    List<TimesheetRecord> findByEmployee(Employee employee, Pageable pageable);
 
     @Query(
             value =

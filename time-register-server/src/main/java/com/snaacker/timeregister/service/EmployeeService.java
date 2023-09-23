@@ -3,21 +3,21 @@ package com.snaacker.timeregister.service;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterException;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
+import com.snaacker.timeregister.model.request.EmployeeRequest;
 import com.snaacker.timeregister.model.request.TimeRecordRequest;
-import com.snaacker.timeregister.model.request.UserRequest;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.model.response.UserMultipleTimeRecordResponse;
-import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.model.response.UserSingleTimeRecordResponse;
+import com.snaacker.timeregister.persistent.Employee;
+import com.snaacker.timeregister.persistent.EmployeeRestaurant;
 import com.snaacker.timeregister.persistent.Message;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.TimesheetRecord;
-import com.snaacker.timeregister.persistent.User;
-import com.snaacker.timeregister.persistent.UserRestaurant;
+import com.snaacker.timeregister.repository.EmployeeRepository;
 import com.snaacker.timeregister.repository.MessageRepository;
 import com.snaacker.timeregister.repository.RestaurantRepository;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;
-import com.snaacker.timeregister.repository.UserRepository;
 import com.snaacker.timeregister.utils.Constants;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import com.snaacker.timeregister.utils.Utilities;
@@ -25,7 +25,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,53 +32,55 @@ import java.util.stream.Collectors;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {
-    Logger logger = LoggerFactory.getLogger(UserService.class);
+public class EmployeeService {
+    Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
-    @Autowired private UserRepository userRepository;
+    @Autowired private EmployeeRepository employeeRepository;
     @Autowired private RestaurantRepository restaurantRepository;
     @Autowired private TimesheetRecordRepository timesheetRecordRepository;
 
     @Autowired private MessageRepository messageRepository;
 
-    public TimeRegisterGenericResponse<UserResponse> getListUser(int startingPage, int pageSize) {
+    public TimeRegisterGenericResponse<EmployeeResponse> getListEmployee(
+            int startingPage, int pageSize) {
 
         Pageable pageable = PageRequest.of(startingPage, pageSize);
-        List<UserResponse> listUser =
-                userRepository.findAll(pageable).stream()
+        List<EmployeeResponse> listUser =
+                employeeRepository.findAll(pageable).stream()
                         .map(DtoTransformation::user2UserResponse)
                         .collect(Collectors.toList());
         return new TimeRegisterGenericResponse<>(listUser, pageSize, startingPage);
     }
 
-    public UserResponse createUser(UserRequest userRequest) throws TimeRegisterBadRequestException {
-        User user = DtoTransformation.dto2User(userRequest);
-        if (null != userRequest.getRestaurantName()) {
-            UserRestaurant userRestaurant = new UserRestaurant();
-            userRestaurant.setUsers(user);
+    public EmployeeResponse createEmployee(EmployeeRequest employeeRequest)
+            throws TimeRegisterBadRequestException {
+        Employee employee = new Employee(employeeRequest);
+        if (null != employeeRequest.getRestaurantName()) {
+            EmployeeRestaurant employeeRestaurant = new EmployeeRestaurant();
+            employeeRestaurant.setEmployee(employee);
             Restaurant returnRestaurant =
-                    restaurantRepository.findByName(userRequest.getRestaurantName());
+                    restaurantRepository.findByName(employeeRequest.getRestaurantName());
             if (null == returnRestaurant) {
                 throw new TimeRegisterBadRequestException("Restaurant does not exist");
             }
-            userRestaurant.setRestaurant(returnRestaurant);
-            if (user.getRoleName().getRoleValue().equals(Constants.MANAGER)) {
-                userRestaurant.setRestaurantManager(true);
+            employeeRestaurant.setRestaurant(returnRestaurant);
+            if (employee.getRoleName().getRoleValue().equals(Constants.MANAGER)) {
+                employeeRestaurant.setRestaurantManager(true);
             }
         } else {
             logger.warn("You need to assign user to existed restaurant later");
         }
         try {
-            user.setPassword(Utilities.encrypt(userRequest.getPassword()));
+            employee.setPassword(Utilities.encrypt(employeeRequest.getPassword()));
         } catch (NoSuchPaddingException
                 | NoSuchAlgorithmException
                 | InvalidKeyException
@@ -87,35 +88,35 @@ public class UserService {
                 | BadPaddingException e) {
             throw new TimeRegisterBadRequestException(e.getMessage());
         }
-        User createdUser = userRepository.save(user);
-        return DtoTransformation.user2UserResponse(createdUser);
+        Employee createdEmployee = employeeRepository.save(employee);
+        return DtoTransformation.user2UserResponse(createdEmployee);
     }
 
-    public UserResponse editUser(Long id, UserRequest userRequest)
+    public EmployeeResponse editUser(Long id, EmployeeRequest employeeRequest)
             throws TimeRegisterBadRequestException {
-        User user = userRepository.getById(id);
-        if (null != userRequest.getEmail()) {
-            user.setEmail(userRequest.getEmail());
+        Employee employee = employeeRepository.getById(id);
+        if (null != employeeRequest.getEmail()) {
+            employee.setEmail(employeeRequest.getEmail());
         }
-        if (null != userRequest.getAddress()) {
-            user.setAddress(userRequest.getAddress());
+        if (null != employeeRequest.getAddress()) {
+            employee.setAddress(employeeRequest.getAddress());
         }
-        if (null != userRequest.getFirstName()) {
-            user.setFirstName(userRequest.getFirstName());
+        if (null != employeeRequest.getFirstName()) {
+            employee.setFirstName(employeeRequest.getFirstName());
         }
-        if (null != userRequest.getLastName()) {
-            user.setLastName(userRequest.getLastName());
+        if (null != employeeRequest.getLastName()) {
+            employee.setLastName(employeeRequest.getLastName());
         }
-        if (null != userRequest.getPhoneNumber()) {
-            user.setPhoneNumber(userRequest.getPhoneNumber());
+        if (null != employeeRequest.getPhoneNumber()) {
+            employee.setPhoneNumber(employeeRequest.getPhoneNumber());
         }
-        if (null != userRequest.getRoleName()) {
-            user.setRoleName(userRequest.getRoleName());
-            if (userRequest.getRoleName().equals("ADMIN")) user.isAdmin();
+        if (null != employeeRequest.getRoleName()) {
+            employee.setRoleName(employeeRequest.getRoleName());
+            if (employeeRequest.getRoleName().equals("ADMIN")) employee.isAdmin();
         }
-        if (null != userRequest.getPassword()) {
+        if (null != employeeRequest.getPassword()) {
             try {
-                user.setPassword(Utilities.encrypt(userRequest.getPassword()));
+                employee.setPassword(Utilities.encrypt(employeeRequest.getPassword()));
             } catch (NoSuchPaddingException
                     | NoSuchAlgorithmException
                     | InvalidKeyException
@@ -125,29 +126,28 @@ public class UserService {
             }
         }
         // TODO: too lazy but must fix - timezone or UTC here
-        user.setUpdatedDate(new Date());
-        User updatedUser = userRepository.save(user);
-        return DtoTransformation.user2UserResponse(updatedUser);
+        Employee updatedEmployee = employeeRepository.save(employee);
+        return DtoTransformation.user2UserResponse(updatedEmployee);
     }
 
     public String deleteUser(long id) throws TimeRegisterBadRequestException {
-        User deleteUser =
-                userRepository
+        Employee deleteEmployee =
+                employeeRepository
                         .findById(id)
                         .orElseThrow(
                                 () -> new TimeRegisterBadRequestException("User does not exist"));
-        userRepository.delete(deleteUser);
+        employeeRepository.delete(deleteEmployee);
 
         return "OK";
     }
 
-    public UserResponse getUserByName(String username) {
-        return DtoTransformation.user2UserResponse(userRepository.findByUsername(username));
+    public EmployeeResponse getUserByName(String username) {
+        return DtoTransformation.user2UserResponse(employeeRepository.findByAccountName(username));
     }
 
-    public UserResponse getUserById(Long id) throws TimeRegisterObjectNotFoundException {
+    public EmployeeResponse getUserById(Long id) throws TimeRegisterObjectNotFoundException {
         return DtoTransformation.user2UserResponse(
-                userRepository
+                employeeRepository
                         .findById(id)
                         .orElseThrow(
                                 () ->
@@ -158,7 +158,7 @@ public class UserService {
     @Transactional
     public UserMultipleTimeRecordResponse addTimeRecord(
             Long id, TimeRecordRequest timeRecordRequest) throws TimeRegisterException {
-        User user = userRepository.findById(id).orElseThrow(TimeRegisterException::new);
+        Employee employee = employeeRepository.findById(id).orElseThrow(TimeRegisterException::new);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         List<TimesheetRecord> listTimesheetRecord =
                 timesheetRecordRepository.findRecordByWorkingDateAndUserId(
@@ -211,40 +211,38 @@ public class UserService {
         timesheetRecord.setWorkingDate(dateFormat.format(timeRecordRequest.getFromTime()));
         timesheetRecord.setToTime(timeRecordRequest.getToTime());
         timesheetRecord.setFromTime(timeRecordRequest.getFromTime());
-        timesheetRecord.setCreatedDate(new Date());
-        timesheetRecord.setUpdatedDate(new Date());
         timesheetRecord.setTimesheetType(timeRecordRequest.getType());
-        timesheetRecord.setUsers(user);
+        timesheetRecord.setEmployee(employee);
         timesheetRecordRepository.save(timesheetRecord);
 
-        user.getUserRestaurants()
+        employee.getEmployeeRestaurants()
                 .forEach(
                         userRestaurant -> {
                             long restaurantId = userRestaurant.getRestaurant().getId();
-                            User restaurantManager =
+                            Employee restaurantManager =
                                     restaurantRepository.getById(restaurantId).getManager();
                             Message message = new Message();
                             message.setContent(
                                     "User "
-                                            + user.getAccountId()
+                                            + employee.getAccountId()
                                             + " has submitted a timesheet record");
-                            message.setUsers(restaurantManager);
+                            message.setEmployee(restaurantManager);
                             messageRepository.save(message);
                         });
 
         // TODO: return timesheet record of that week
         List<TimesheetRecord> listTimeSheetRecord =
-                timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(user.getId());
+                timesheetRecordRepository.getTimeRecordOnSavedMonthOfUser(employee.getId());
 
         UserMultipleTimeRecordResponse userMultipleTimeRecordResponse =
-                DtoTransformation.Object2UserTimeRecordResponse(listTimeSheetRecord, user);
+                DtoTransformation.Object2UserTimeRecordResponse(listTimeSheetRecord, employee);
 
         return userMultipleTimeRecordResponse;
     }
 
     public UserMultipleTimeRecordResponse approvedTimesheet(
             Long userId, List<Long> listTimeSheetId) {
-        User returnUser = userRepository.getById(userId);
+        Employee returnEmployee = employeeRepository.getById(userId);
         listTimeSheetId.stream()
                 .forEach(
                         timesheetId -> {
@@ -257,11 +255,11 @@ public class UserService {
         Message message = new Message();
         // TODO: introduce user display name
         message.setContent("Your timesheet has been approved");
-        message.setUsers(returnUser);
+        message.setEmployee(returnEmployee);
         messageRepository.save(message);
         UserMultipleTimeRecordResponse userMultipleTimeRecordResponse =
                 new UserMultipleTimeRecordResponse();
-        userMultipleTimeRecordResponse.setUser(new UserResponse(returnUser));
+        userMultipleTimeRecordResponse.setUser(new EmployeeResponse(returnEmployee));
         // TODO: get timerecord values and set timerecord here
         userMultipleTimeRecordResponse.setTimeRecords(new TimeRegisterGenericResponse<>());
         return userMultipleTimeRecordResponse;
@@ -270,44 +268,45 @@ public class UserService {
     public UserSingleTimeRecordResponse editTimeRecord(
             Long userId, Long recordId, TimeRecordRequest timeRecord) {
         // check user existence
-        User returnUser = userRepository.getById(userId);
+        Employee returnEmployee = employeeRepository.getById(userId);
 
         TimesheetRecord requestChangeTimesheet = timesheetRecordRepository.getById(recordId);
         requestChangeTimesheet.setTimesheetType(timeRecord.getType());
         requestChangeTimesheet.setToTime(timeRecord.getToTime());
         requestChangeTimesheet.setFromTime(timeRecord.getFromTime());
         requestChangeTimesheet.setTimesheetType(timeRecord.getType());
-        returnUser
-                .getUserRestaurants()
+        returnEmployee
+                .getEmployeeRestaurants()
                 .forEach(
                         userRestaurant -> {
                             long restaurantId = userRestaurant.getRestaurant().getId();
-                            User restaurantManager =
+                            Employee restaurantManager =
                                     restaurantRepository.getById(restaurantId).getManager();
                             Message message = new Message();
                             // TODO: introduce user display name
                             message.setContent(
                                     "User "
-                                            + returnUser.getAccountId()
+                                            + returnEmployee.getAccountId()
                                             + " has edit his/her timesheet");
-                            message.setUsers(restaurantManager);
+                            message.setEmployee(restaurantManager);
                             messageRepository.save(message);
                         });
         TimesheetRecord returnTimesheet = timesheetRecordRepository.save(requestChangeTimesheet);
-        return new UserSingleTimeRecordResponse(returnUser, returnTimesheet);
+        return new UserSingleTimeRecordResponse(returnEmployee, returnTimesheet);
     }
 
-    public UserResponse assignRestaurant(Long user_id, Long restaurant_id) {
-        User user = userRepository.findById(user_id).get();
+    public EmployeeResponse assignRestaurant(Long user_id, Long restaurant_id) {
+        Employee employee = employeeRepository.findById(user_id).get();
         Restaurant restaurant = restaurantRepository.findById(restaurant_id).get();
-        UserRestaurant userRestaurant = new UserRestaurant();
-        userRestaurant.setUsers(user);
-        userRestaurant.setRestaurant(restaurant);
-        userRestaurant.setRestaurantManager(
-                user.getRoleName().getRoleValue().equals(Constants.MANAGER));
-        Set<UserRestaurant> setUserRestaurant = new HashSet<>(Arrays.asList(userRestaurant));
-        user.setUserRestaurants(setUserRestaurant);
-        User returnUser = userRepository.save(user);
-        return new UserResponse(returnUser);
+        EmployeeRestaurant employeeRestaurant = new EmployeeRestaurant();
+        employeeRestaurant.setEmployee(employee);
+        employeeRestaurant.setRestaurant(restaurant);
+        employeeRestaurant.setRestaurantManager(
+                employee.getRoleName().getRoleValue().equals(Constants.MANAGER));
+        Set<EmployeeRestaurant> setEmployeeRestaurant =
+                new HashSet<>(Arrays.asList(employeeRestaurant));
+        employee.setEmployeeRestaurants(setEmployeeRestaurant);
+        Employee returnEmployee = employeeRepository.save(employee);
+        return new EmployeeResponse(returnEmployee);
     }
 }

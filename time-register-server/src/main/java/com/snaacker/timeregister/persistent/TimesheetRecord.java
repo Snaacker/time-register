@@ -1,7 +1,12 @@
 package com.snaacker.timeregister.persistent;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -33,7 +38,7 @@ public class TimesheetRecord extends BaseObject {
 
     // This is a stupid issue since user is a keyword in Postgres
     @ManyToOne(fetch = FetchType.LAZY)
-    private User users;
+    private Employee employee;
 
     @OneToOne private Restaurant restaurant;
 }

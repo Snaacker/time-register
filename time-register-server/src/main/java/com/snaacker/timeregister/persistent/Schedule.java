@@ -1,15 +1,19 @@
 package com.snaacker.timeregister.persistent;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-@Entity
-@Table(name = "schedule")
 @Getter
 @Setter
+@Entity
+@Table(name = "schedule")
 @RestResource(exported = false)
 public class Schedule extends BaseObject {
 

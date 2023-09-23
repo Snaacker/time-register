@@ -1,7 +1,7 @@
 package com.snaacker.timeregister.config;
 
-import com.snaacker.timeregister.model.response.UserResponse;
-import com.snaacker.timeregister.persistent.User;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
+import com.snaacker.timeregister.persistent.Employee;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -49,9 +49,9 @@ public class JwtTokenConfiguration implements Serializable {
     }
 
     // generate token for user
-    public String generateToken(User user) {
+    public String generateToken(Employee employee) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, user.getUsername());
+        return doGenerateToken(claims, employee.getAccountName());
     }
 
     // while creating the token -
@@ -72,7 +72,7 @@ public class JwtTokenConfiguration implements Serializable {
     }
 
     // validate token
-    public Boolean validateToken(String token, UserResponse user) {
+    public Boolean validateToken(String token, EmployeeResponse user) {
         final String username = getUsernameFromToken(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
     }

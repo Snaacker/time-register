@@ -4,8 +4,8 @@ import com.snaacker.timeregister.annotation.AllowAnonymous;
 import com.snaacker.timeregister.config.JwtTokenConfiguration;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterUnauthorizedException;
-import com.snaacker.timeregister.persistent.User;
-import com.snaacker.timeregister.repository.UserRepository;
+import com.snaacker.timeregister.persistent.Employee;
+import com.snaacker.timeregister.repository.EmployeeRepository;
 import com.snaacker.timeregister.utils.Utilities;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,16 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/authentication")
-public class AuthenticateController {
-    private UserRepository userRepository;
+public class AuthenticationController {
+    private final EmployeeRepository employeeRepository;
 
-    private JwtTokenConfiguration jwtTokenConfiguration;
+    private final JwtTokenConfiguration jwtTokenConfiguration;
 
     @Autowired
-    public AuthenticateController(
-            final UserRepository userRepository,
+    public AuthenticationController(
+            final EmployeeRepository employeeRepository,
             final JwtTokenConfiguration jwtTokenConfiguration) {
-        this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
         this.jwtTokenConfiguration = jwtTokenConfiguration;
     }
 
@@ -43,11 +43,11 @@ public class AuthenticateController {
         byte[] decodedBytes = Base64.getDecoder().decode(credential);
         String decodedString = new String(decodedBytes);
         String[] userCredential = decodedString.split(":");
-        User requestUser = userRepository.findByUsername(userCredential[0]);
-        if (null == requestUser) {
+        Employee requestEmployee = employeeRepository.findByAccountName(userCredential[0]);
+        if (null == requestEmployee) {
             throw new TimeRegisterUnauthorizedException("Bad credential");
         }
-        String requestPassword = requestUser.getPassword();
+        String requestPassword = requestEmployee.getPassword();
         String hashRequestPassword = "";
         try {
             hashRequestPassword =
@@ -61,9 +61,8 @@ public class AuthenticateController {
         }
         if (!requestPassword.equals(hashRequestPassword)) {
             throw new TimeRegisterUnauthorizedException("Bad credential");
-        } else {
-            return new ResponseEntity<>(
-                    jwtTokenConfiguration.generateToken(requestUser), HttpStatus.ACCEPTED);
         }
+        return new ResponseEntity<>(
+                jwtTokenConfiguration.generateToken(requestEmployee), HttpStatus.ACCEPTED);
     }
 }

@@ -17,7 +17,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
-public class UserRequest {
+public class EmployeeRequest {
 
     @JsonProperty("account_id")
     private String accountId;

@@ -8,7 +8,6 @@ import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.Schedule;
 import com.snaacker.timeregister.repository.RestaurantRepository;
 import com.snaacker.timeregister.repository.ScheduleRepository;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +70,6 @@ public class ScheduleService {
         if (null != scheduleRequest.getSpecialDateName()) {
             schedule.setSpecialDateName(scheduleRequest.getSpecialDateName());
         }
-        schedule.setUpdatedDate(new Date());
         return new ScheduleResponse(scheduleRepository.save(schedule));
     }
 }

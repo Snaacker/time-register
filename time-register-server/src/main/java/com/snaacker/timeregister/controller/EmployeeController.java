@@ -4,72 +4,82 @@ import com.snaacker.timeregister.annotation.AllowAdmin;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterException;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
+import com.snaacker.timeregister.model.request.EmployeeRequest;
 import com.snaacker.timeregister.model.request.TimeRecordRequest;
-import com.snaacker.timeregister.model.request.UserRequest;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
 import com.snaacker.timeregister.model.response.TimeRecordResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.model.response.UserMultipleTimeRecordResponse;
-import com.snaacker.timeregister.model.response.UserResponse;
 import com.snaacker.timeregister.model.response.UserSingleTimeRecordResponse;
+import com.snaacker.timeregister.service.EmployeeService;
 import com.snaacker.timeregister.service.TimesheetRecordService;
-import com.snaacker.timeregister.service.UserService;
 import com.snaacker.timeregister.utils.Constants;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserController {
-    private UserService userService;
-    private TimesheetRecordService timesheetRecordService;
+public class EmployeeController {
+    private final EmployeeService employeeService;
+    private final TimesheetRecordService timesheetRecordService;
 
     @Autowired
-    public UserController(
-            final UserService userService, final TimesheetRecordService timesheetRecordService) {
-        this.userService = userService;
+    public EmployeeController(
+            final EmployeeService employeeService,
+            final TimesheetRecordService timesheetRecordService) {
+        this.employeeService = employeeService;
         this.timesheetRecordService = timesheetRecordService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id)
+    public ResponseEntity<EmployeeResponse> getUserById(@PathVariable Long id)
             throws TimeRegisterObjectNotFoundException {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getUserById(id), HttpStatus.OK);
     }
 
     @AllowAdmin
     @GetMapping("")
-    public ResponseEntity<TimeRegisterGenericResponse<UserResponse>> getListUser(
+    public ResponseEntity<TimeRegisterGenericResponse<EmployeeResponse>> getListUser(
             @RequestParam(name = "startPage", defaultValue = Constants.DEFAULT_START_PAGE + "")
                     int startPage,
             @RequestParam(name = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE + "")
                     int pageSize) {
-        return new ResponseEntity<>(userService.getListUser(startPage, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(
+                employeeService.getListEmployee(startPage, pageSize), HttpStatus.OK);
     }
 
     @AllowAdmin
     @PutMapping("")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user)
+    public ResponseEntity<EmployeeResponse> createUser(@RequestBody EmployeeRequest user)
             throws TimeRegisterBadRequestException {
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeService.createEmployee(user), HttpStatus.CREATED);
     }
 
     @AllowAdmin
     @PostMapping("/{id}")
-    public ResponseEntity<UserResponse> editUser(
-            @PathVariable long id, @RequestBody UserRequest user)
+    public ResponseEntity<EmployeeResponse> editUser(
+            @PathVariable long id, @RequestBody EmployeeRequest user)
             throws TimeRegisterBadRequestException {
-        return new ResponseEntity<>(userService.editUser(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.editUser(id, user), HttpStatus.OK);
     }
 
     @AllowAdmin
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id)
             throws TimeRegisterBadRequestException {
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.deleteUser(id), HttpStatus.OK);
     }
 
     @AllowAdmin
@@ -101,7 +111,7 @@ public class UserController {
             @PathVariable Long id, @RequestBody TimeRecordRequest timeRecordRequest)
             throws TimeRegisterException {
         return new ResponseEntity<>(
-                userService.addTimeRecord(id, timeRecordRequest), HttpStatus.CREATED);
+                employeeService.addTimeRecord(id, timeRecordRequest), HttpStatus.CREATED);
     }
 
     @PostMapping("/{user_id}/time_record/{record_id}")
@@ -110,23 +120,24 @@ public class UserController {
             @PathVariable Long record_id,
             @RequestBody TimeRecordRequest timeRecord) {
         return new ResponseEntity<>(
-                userService.editTimeRecord(user_id, record_id, timeRecord), HttpStatus.ACCEPTED);
+                employeeService.editTimeRecord(user_id, record_id, timeRecord),
+                HttpStatus.ACCEPTED);
     }
 
     @AllowAdmin
     @PostMapping("/{user_id}/confirmation")
     public ResponseEntity<String> approveTimeSheet(
             @PathVariable Long user_id, @RequestBody List<Long> listTimeSheetId) {
-        userService.approvedTimesheet(user_id, listTimeSheetId);
+        employeeService.approvedTimesheet(user_id, listTimeSheetId);
         // TODO: return user response
         return new ResponseEntity<>("Success approved", HttpStatus.OK);
     }
 
     @AllowAdmin
     @PostMapping("/{user_id}/restaurant/{restaurant_id}")
-    public ResponseEntity<UserResponse> assignRestaurant(
+    public ResponseEntity<EmployeeResponse> assignRestaurant(
             @PathVariable Long user_id, @PathVariable Long restaurant_id) {
         return new ResponseEntity<>(
-                userService.assignRestaurant(user_id, restaurant_id), HttpStatus.OK);
+                employeeService.assignRestaurant(user_id, restaurant_id), HttpStatus.OK);
     }
 }

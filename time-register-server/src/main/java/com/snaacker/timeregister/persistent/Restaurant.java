@@ -1,16 +1,16 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.request.RestaurantRequest;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -36,8 +36,8 @@ public class Restaurant extends BaseObject {
     @Column(name = "status")
     private boolean status;
 
-    @Column(name = "closing_date_type")
-    private ClosingDateType closingDateType;
+    //    @Column(name = "closing_date_type")
+    //    private ClosingDateType closingDateType;
 
     @Column(name = "timesheet_closing_day_of_week")
     private DayOfWeek timesheetClosingDayOfWeek;
@@ -48,10 +48,10 @@ public class Restaurant extends BaseObject {
     @Column(name = "timesheet_closing_date")
     private Date timesheetClosingDate;
 
-    @OneToOne private User manager;
+    @OneToOne private Employee manager;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
-    private Set<UserRestaurant> userRestaurant = new HashSet<>();
+    private Set<EmployeeRestaurant> employeeRestaurant = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     private Set<Schedule> schedule;

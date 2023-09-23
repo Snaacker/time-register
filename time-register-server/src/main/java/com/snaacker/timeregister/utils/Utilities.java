@@ -1,6 +1,8 @@
 package com.snaacker.timeregister.utils;
 
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.crypto.BadPaddingException;

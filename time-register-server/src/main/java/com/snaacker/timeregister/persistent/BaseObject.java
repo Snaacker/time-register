@@ -1,7 +1,7 @@
 package com.snaacker.timeregister.persistent;
 
+import jakarta.persistence.*;
 import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

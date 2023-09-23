@@ -4,12 +4,12 @@ import com.snaacker.timeregister.annotation.AllowAdmin;
 import com.snaacker.timeregister.annotation.AllowAnonymous;
 import com.snaacker.timeregister.exception.TimeRegisterBadRequestException;
 import com.snaacker.timeregister.exception.TimeRegisterUserNotAllowException;
-import com.snaacker.timeregister.model.response.UserResponse;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
 import com.snaacker.timeregister.persistent.Role;
-import com.snaacker.timeregister.service.UserService;
+import com.snaacker.timeregister.service.EmployeeService;
 import io.jsonwebtoken.ExpiredJwtException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    @Autowired UserService userService;
+    @Autowired EmployeeService employeeService;
     @Autowired JwtTokenConfiguration jwtTokenConfiguration;
 
     @Override
@@ -69,7 +69,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                         System.out.println("JWT Token has expired");
                     }
                     // TODO: this is wrong, should be DTO class instead
-                    UserResponse authenticatedUser = userService.getUserByName(username);
+                    EmployeeResponse authenticatedUser = employeeService.getUserByName(username);
                     jwtTokenConfiguration.validateToken(jwtToken, authenticatedUser);
 
                     // TODO: check authorization here

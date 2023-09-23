@@ -18,7 +18,7 @@ import lombok.Setter;
         ignoreUnknown = true)
 public class UserMultipleTimeRecordResponse {
     @JsonProperty("user")
-    UserResponse user;
+    EmployeeResponse user;
 
     @JsonProperty("time_records")
     TimeRegisterGenericResponse<TimeRecordResponse> timeRecords;

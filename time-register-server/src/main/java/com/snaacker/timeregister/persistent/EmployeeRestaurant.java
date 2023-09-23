@@ -1,25 +1,31 @@
 package com.snaacker.timeregister.persistent;
 
 import com.snaacker.timeregister.model.UserRestaurantDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.io.Serializable;
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 @Entity
-@Table(name = "user_restaurant")
+@Table(name = "employee_restaurant")
 @RestResource(exported = false)
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRestaurant extends BaseObject implements Serializable {
+public class EmployeeRestaurant extends BaseObject implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User users;
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -29,7 +35,7 @@ public class UserRestaurant extends BaseObject implements Serializable {
     @Column(name = "is_restaurant_manager")
     private boolean isRestaurantManager;
 
-    public UserRestaurant(UserRestaurantDto userRestaurantDto) {
+    public EmployeeRestaurant(UserRestaurantDto userRestaurantDto) {
         this.isRestaurantManager = userRestaurantDto.isManager();
     }
 }

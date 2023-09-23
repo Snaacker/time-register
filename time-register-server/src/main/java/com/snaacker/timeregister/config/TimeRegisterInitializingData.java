@@ -1,11 +1,11 @@
 package com.snaacker.timeregister.config;
 
+import com.snaacker.timeregister.persistent.Employee;
+import com.snaacker.timeregister.persistent.EmployeeRestaurant;
 import com.snaacker.timeregister.persistent.Restaurant;
 import com.snaacker.timeregister.persistent.Role;
-import com.snaacker.timeregister.persistent.User;
-import com.snaacker.timeregister.persistent.UserRestaurant;
+import com.snaacker.timeregister.repository.EmployeeRepository;
 import com.snaacker.timeregister.repository.RestaurantRepository;
-import com.snaacker.timeregister.repository.UserRepository;
 import com.snaacker.timeregister.utils.Utilities;
 import java.util.Base64;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeRegisterInitializingData {
 
-    @Autowired private UserRepository userRepository;
+    @Autowired private EmployeeRepository employeeRepository;
     @Autowired private RestaurantRepository restaurantRepository;
 
     @EventListener
@@ -27,8 +27,8 @@ public class TimeRegisterInitializingData {
         String password = Base64.getEncoder().encodeToString(Utilities.encryptToByte("qwerty"));
         System.out.println("================ Password: " + password);
         // Create first admin user - using flyway later
-        User admin = new User();
-        admin.setUsername("admin");
+        Employee admin = new Employee();
+        admin.setAccountName("admin");
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setAccountId("admin");
@@ -36,7 +36,7 @@ public class TimeRegisterInitializingData {
         admin.setAdmin(true);
         admin.setRoleName(Role.ADMIN);
         admin.setPassword(password);
-        userRepository.save(admin);
+        employeeRepository.save(admin);
 
         Restaurant restaurantTokyoSushi = new Restaurant();
         restaurantTokyoSushi.setName("Tokyo Sushi");
@@ -44,40 +44,39 @@ public class TimeRegisterInitializingData {
         restaurantTokyoSushi.setPhoneNumber("123-456-789");
         restaurantRepository.save(restaurantTokyoSushi);
 
-        User employee = new User();
+        Employee employee = new Employee();
         employee.setAccountId("duyh");
-        employee.setUsername("hoang_a_bi");
+        employee.setAccountName("hoang_a_bi");
         employee.setRoleName(Role.EMPLOYEE);
         employee.setFirstName("Hoang");
         employee.setLastName("Duy");
         employee.setEmail("duy@magdeburg.de");
         employee.setPassword(password);
-        employee.setMaximumWorkingHoursPerWeek(20);
 
-        UserRestaurant employeeRestaurant = new UserRestaurant();
-        employeeRestaurant.setUsers(employee);
+        EmployeeRestaurant employeeRestaurant = new EmployeeRestaurant();
+        employeeRestaurant.setEmployee(employee);
         employeeRestaurant.setRestaurant(restaurantTokyoSushi);
-        Set<UserRestaurant> setUserRestaurant = new HashSet<>();
-        setUserRestaurant.add(employeeRestaurant);
-        employee.setUserRestaurants(setUserRestaurant);
-        userRepository.save(employee);
+        Set<EmployeeRestaurant> setEmployeeRestaurant = new HashSet<>();
+        setEmployeeRestaurant.add(employeeRestaurant);
+        employee.setEmployeeRestaurants(setEmployeeRestaurant);
+        employeeRepository.save(employee);
 
-        User manager = new User();
+        Employee manager = new Employee();
         manager.setAccountId("huytq");
-        manager.setUsername("snaacker");
+        manager.setAccountName("snaacker");
         manager.setRoleName(Role.MANAGER);
         manager.setFirstName("Tran");
         manager.setLastName("Huy");
         manager.setEmail("you@snaacker.com");
         manager.setPassword(password);
 
-        UserRestaurant managerRestaurant = new UserRestaurant();
-        managerRestaurant.setUsers(manager);
+        EmployeeRestaurant managerRestaurant = new EmployeeRestaurant();
+        managerRestaurant.setEmployee(manager);
         managerRestaurant.setRestaurant(restaurantTokyoSushi);
         managerRestaurant.setRestaurantManager(true);
-        Set<UserRestaurant> setManagerRestaurant = new HashSet<>();
+        Set<EmployeeRestaurant> setManagerRestaurant = new HashSet<>();
         setManagerRestaurant.add(managerRestaurant);
-        manager.setUserRestaurants(setManagerRestaurant);
-        userRepository.save(manager);
+        manager.setEmployeeRestaurants(setManagerRestaurant);
+        employeeRepository.save(manager);
     }
 }

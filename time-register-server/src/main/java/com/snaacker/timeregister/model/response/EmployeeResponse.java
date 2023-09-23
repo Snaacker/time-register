@@ -1,10 +1,10 @@
 package com.snaacker.timeregister.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.snaacker.timeregister.persistent.Employee;
 import com.snaacker.timeregister.persistent.Role;
-import com.snaacker.timeregister.persistent.User;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -19,8 +19,8 @@ import lombok.Setter;
 @JsonIgnoreProperties(
         value = {"hibernateLazyInitializer", "handler"},
         ignoreUnknown = true)
-public class UserResponse {
-    @NotNull
+public class EmployeeResponse {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("id")
     private Long id;
 
@@ -51,15 +51,15 @@ public class UserResponse {
     @JsonProperty("email")
     private String email;
 
-    public UserResponse(User user) {
-        this.id = user.getId();
-        this.accountId = user.getAccountId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.phoneNumber = user.getPhoneNumber();
-        this.address = user.getAddress();
-        this.roleName = user.getRoleName();
-        this.email = user.getEmail();
-        this.maximumWorkingHours = user.getMaximumWorkingHoursPerWeek();
+    public EmployeeResponse(Employee employee) {
+        this.id = employee.getId();
+        this.accountId = employee.getAccountId();
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.phoneNumber = employee.getPhoneNumber();
+        this.address = employee.getAddress();
+        this.roleName = employee.getRoleName();
+        this.email = employee.getEmail();
+        this.maximumWorkingHours = employee.getContract().getMaximumWorkingHoursPerMonth();
     }
 }

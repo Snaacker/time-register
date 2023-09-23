@@ -3,10 +3,10 @@ package com.snaacker.timeregister.service;
 import com.snaacker.timeregister.exception.TimeRegisterObjectNotFoundException;
 import com.snaacker.timeregister.model.response.TimeRecordResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
+import com.snaacker.timeregister.persistent.Employee;
 import com.snaacker.timeregister.persistent.TimesheetRecord;
-import com.snaacker.timeregister.persistent.User;
+import com.snaacker.timeregister.repository.EmployeeRepository;
 import com.snaacker.timeregister.repository.TimesheetRecordRepository;
-import com.snaacker.timeregister.repository.UserRepository;
 import com.snaacker.timeregister.utils.DtoTransformation;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,25 +20,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class TimesheetRecordService {
 
-    private TimesheetRecordRepository timesheetRecordRepository;
-    private UserRepository userRepository;
+    private final TimesheetRecordRepository timesheetRecordRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public TimesheetRecordService(
             final TimesheetRecordRepository timesheetRecordRepository,
-            final UserRepository userRepository) {
+            final EmployeeRepository employeeRepository) {
         this.timesheetRecordRepository = timesheetRecordRepository;
-        this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public TimeRegisterGenericResponse<TimeRecordResponse> getTimeRecordByUserId(
             long userId, Date fromDate, Date toDate, int startPage, int pageSize)
             throws TimeRegisterObjectNotFoundException {
-        userRepository
+        employeeRepository
                 .findById(userId)
                 .orElseThrow(() -> new TimeRegisterObjectNotFoundException("User does not exist"));
-        User user =
-                userRepository
+        Employee employee =
+                employeeRepository
                         .findById(userId)
                         .orElseThrow(
                                 () -> new TimeRegisterObjectNotFoundException("User not found"));
@@ -49,7 +49,7 @@ public class TimesheetRecordService {
                         .findRecordInTimeRange(
                                 dateFormat.format(fromDate),
                                 dateFormat.format(toDate),
-                                user.getId())
+                                employee.getId())
                         .stream()
                         .map(
                                 timesheetRecord ->

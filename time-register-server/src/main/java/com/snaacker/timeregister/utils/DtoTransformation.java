@@ -1,54 +1,34 @@
 package com.snaacker.timeregister.utils;
 
-import com.snaacker.timeregister.model.*;
+import com.snaacker.timeregister.model.UserRestaurantDto;
 import com.snaacker.timeregister.model.request.RestaurantRequest;
-import com.snaacker.timeregister.model.request.UserRequest;
+import com.snaacker.timeregister.model.response.EmployeeResponse;
 import com.snaacker.timeregister.model.response.TimeRecordResponse;
 import com.snaacker.timeregister.model.response.TimeRegisterGenericResponse;
 import com.snaacker.timeregister.model.response.UserMultipleTimeRecordResponse;
-import com.snaacker.timeregister.model.response.UserResponse;
-import com.snaacker.timeregister.persistent.*;
+import com.snaacker.timeregister.persistent.Employee;
+import com.snaacker.timeregister.persistent.EmployeeRestaurant;
+import com.snaacker.timeregister.persistent.Restaurant;
+import com.snaacker.timeregister.persistent.TimesheetRecord;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DtoTransformation {
-    // TODO: these dto transform methods are not needed
-    public static UserRequest model2Dto(User user) {
-        UserRequest userRequest = new UserRequest();
-        userRequest.setAddress(user.getAddress());
-        userRequest.setAccountId(user.getAccountId());
-        userRequest.setFirstName(user.getFirstName());
-        userRequest.setLastName(user.getLastName());
-        userRequest.setPhoneNumber(user.getPhoneNumber());
-        return userRequest;
-    }
 
-    public static UserResponse user2UserResponse(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setAddress(user.getAddress());
-        userResponse.setAccountId(user.getAccountId());
-        userResponse.setFirstName(user.getFirstName());
-        userResponse.setLastName(user.getLastName());
-        userResponse.setPhoneNumber(user.getPhoneNumber());
-        userResponse.setRoleName(user.getRoleName());
-        userResponse.setId(user.getId());
-        userResponse.setUsername(user.getUsername());
-        userResponse.setMaximumWorkingHours(user.getMaximumWorkingHoursPerWeek());
-        userResponse.setEmail(user.getEmail());
-        return userResponse;
-    }
-
-    public static User dto2User(UserRequest requestUser) {
-        User user = new User();
-        user.setAddress(requestUser.getAddress());
-        user.setEmail(requestUser.getEmail());
-        user.setUsername(requestUser.getUserName());
-        user.setAccountId(requestUser.getAccountId());
-        user.setRoleName(requestUser.getRoleName());
-        user.setFirstName(requestUser.getFirstName());
-        user.setLastName(requestUser.getLastName());
-        user.setPhoneNumber(requestUser.getPhoneNumber());
-        return user;
+    public static EmployeeResponse user2UserResponse(Employee employee) {
+        EmployeeResponse employeeResponse = new EmployeeResponse();
+        employeeResponse.setAddress(employee.getAddress());
+        employeeResponse.setAccountId(employee.getAccountId());
+        employeeResponse.setFirstName(employee.getFirstName());
+        employeeResponse.setLastName(employee.getLastName());
+        employeeResponse.setPhoneNumber(employee.getPhoneNumber());
+        employeeResponse.setRoleName(employee.getRoleName());
+        employeeResponse.setId(employee.getId());
+        employeeResponse.setUsername(employee.getAccountName());
+        employeeResponse.setMaximumWorkingHours(
+                employee.getContract().getMaximumWorkingHoursPerWeek());
+        employeeResponse.setEmail(employee.getEmail());
+        return employeeResponse;
     }
 
     public static TimeRecordResponse timesheetRecord2TimeRecordResponse(
@@ -60,17 +40,17 @@ public class DtoTransformation {
     }
 
     public static UserMultipleTimeRecordResponse Object2UserTimeRecordResponse(
-            List<TimesheetRecord> listTimeSheetRecord, User user) {
+            List<TimesheetRecord> listTimeSheetRecord, Employee employee) {
         UserMultipleTimeRecordResponse userMultipleTimeRecordResponse =
                 new UserMultipleTimeRecordResponse();
-        UserResponse responseUser = new UserResponse();
-        responseUser.setId(user.getId());
-        responseUser.setAddress(user.getAddress());
-        responseUser.setAccountId(user.getAccountId());
-        responseUser.setFirstName(user.getFirstName());
-        responseUser.setLastName(user.getLastName());
-        responseUser.setPhoneNumber(user.getPhoneNumber());
-        responseUser.setRoleName(user.getRoleName());
+        EmployeeResponse responseUser = new EmployeeResponse();
+        responseUser.setId(employee.getId());
+        responseUser.setAddress(employee.getAddress());
+        responseUser.setAccountId(employee.getAccountId());
+        responseUser.setFirstName(employee.getFirstName());
+        responseUser.setLastName(employee.getLastName());
+        responseUser.setPhoneNumber(employee.getPhoneNumber());
+        responseUser.setRoleName(employee.getRoleName());
         userMultipleTimeRecordResponse.setUser(responseUser);
 
         List<TimeRecordResponse> timeRecordResponseList =
@@ -99,7 +79,7 @@ public class DtoTransformation {
         restaurant.setName(restaurantRequest.getName());
         restaurant.setAddress(restaurantRequest.getAddress());
         if (null != restaurantRequest.getUserRestaurantDto()) {
-            restaurant.setUserRestaurant(
+            restaurant.setEmployeeRestaurant(
                     restaurantRequest.getUserRestaurantDto().stream()
                             .map(DtoTransformation::UserRestaurantDto2UserRestaurant)
                             .collect(Collectors.toSet()));
@@ -107,12 +87,12 @@ public class DtoTransformation {
         return restaurant;
     }
 
-    private static UserRestaurant UserRestaurantDto2UserRestaurant(
+    private static EmployeeRestaurant UserRestaurantDto2UserRestaurant(
             UserRestaurantDto userRestaurantDto) {
-        UserRestaurant userRestaurant = new UserRestaurant();
+        EmployeeRestaurant employeeRestaurant = new EmployeeRestaurant();
 
         //    userRestaurant.setUsers();
-        userRestaurant.setRestaurantManager(userRestaurantDto.isManager());
-        return userRestaurant;
+        employeeRestaurant.setRestaurantManager(userRestaurantDto.isManager());
+        return employeeRestaurant;
     }
 }
