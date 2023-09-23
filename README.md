@@ -1,2 +1,0 @@
-# Time register application
-
