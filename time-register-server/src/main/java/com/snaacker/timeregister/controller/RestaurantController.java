@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/restaurant")
 public class RestaurantController {
 
-    private RestaurantService restaurantService;
-    private ScheduleService scheduleService;
+    private final RestaurantService restaurantService;
+    private final ScheduleService scheduleService;
 
     @Autowired
     public RestaurantController(

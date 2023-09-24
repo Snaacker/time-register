@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 public class RestaurantControllerTest extends FixtureTest {
 
     RestaurantController restaurantController;
-
     RestaurantService restaurantService;
     ScheduleService scheduleService;
 
@@ -61,7 +60,7 @@ public class RestaurantControllerTest extends FixtureTest {
                 new RestaurantResponse("Restaurant1", "Hanoi", "email1", "123456");
         when(restaurantService.getRestaurantById(anyLong())).thenReturn(restaurantResponse);
         ResponseEntity<RestaurantResponse> returnObject =
-                restaurantController.getRestaurantById(1l);
+                restaurantController.getRestaurantById(1L);
         assertThat(returnObject.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(returnObject.getBody().getName()).isEqualTo("Restaurant1");
         assertThat(returnObject.getBody().getAddress()).isEqualTo("Hanoi");

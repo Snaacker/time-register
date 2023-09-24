@@ -1,3 +1,4 @@
 rootProject.name = 'time-register'
 
-include 'time-register-server', 'time-register-ui'
+include 'time-register-server'
+include 'time-register-ui'

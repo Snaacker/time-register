@@ -1,12 +1,11 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.7'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '3.0.0'
     id 'java'
     id "com.diffplug.spotless" version "6.10.0"
 }
 
 group = 'com.snaacker'
-sourceCompatibility = '18'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
@@ -21,9 +20,15 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation ('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-jetty'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+//    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+//    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 //    implementation 'org.apache.kafka:kafka-streams'
 //    implementation 'org.apache.kafka:spring-kafka'
 //    implementation 'org.springframework.kafka:spring-kafka'

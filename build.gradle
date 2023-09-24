@@ -1,18 +1,24 @@
 plugins {
-    id 'java'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+subprojects {
 
-repositories {
-    mavenCentral()
+    group = 'com.snaacker.time-register'
+    version = '0.0.1-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.7.RELEASE")
+        }
+    }
+
 }
-
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean

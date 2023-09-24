@@ -31,7 +31,7 @@ public class TimesheetRecordService {
         this.employeeRepository = employeeRepository;
     }
 
-    public TimeRegisterGenericResponse<TimeRecordResponse> getTimeRecordByUserId(
+    public TimeRegisterGenericResponse getTimeRecordByUserId(
             long userId, Date fromDate, Date toDate, int startPage, int pageSize)
             throws TimeRegisterObjectNotFoundException {
         employeeRepository
@@ -52,9 +52,7 @@ public class TimesheetRecordService {
                                 employee.getId())
                         .stream()
                         .map(
-                                timesheetRecord ->
-                                        DtoTransformation.timesheetRecord2TimeRecordResponse(
-                                                timesheetRecord))
+                            DtoTransformation::timesheetRecord2TimeRecordResponse)
                         .collect(Collectors.toList());
         return new TimeRegisterGenericResponse(listTimeRecordResponse, startPage, pageSize);
     }
