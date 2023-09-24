@@ -51,8 +51,7 @@ public class TimesheetRecordService {
                                 dateFormat.format(toDate),
                                 employee.getId())
                         .stream()
-                        .map(
-                            DtoTransformation::timesheetRecord2TimeRecordResponse)
+                        .map(DtoTransformation::timesheetRecord2TimeRecordResponse)
                         .collect(Collectors.toList());
         return new TimeRegisterGenericResponse(listTimeRecordResponse, startPage, pageSize);
     }
